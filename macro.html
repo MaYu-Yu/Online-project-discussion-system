@@ -1,0 +1,20 @@
+{% macro quick_form(form) %}
+<form method="POST">
+    <TABLE>
+    {% for item in form %}
+        {% if item.type == 'CSRFTokenField' %}
+            {{ item() }}
+        {% elif item.type == 'SubmitField' %}
+            <TR><TD><TD> {{ form.submit() }}
+        {% else %}
+            <TR> <TD> {{ item.label }} <TD> {{ item() }} </TR>
+        {% endif %}
+    {% endfor %}
+    </TABLE>
+</form>
+{% endmacro %}
+
+
+
+<!-- {% import 'macro.html' as macro %}
+{{ macro.quick_form(form) }}  -->
