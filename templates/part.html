@@ -18,9 +18,8 @@
             <a href="/stat">統計管理</a>
             
         </h3>
-
-        <div onClick="location.href='/discuss?id={{project_id}}'">{{name}}
-        </div>
+        {% import 'macro.html' as macro %}
+        {{ macro.print_list(html_list) }}
 
         </center>
         

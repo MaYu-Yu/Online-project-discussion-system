@@ -1,3 +1,4 @@
+<!-- WTF顯示 -->
 {% macro quick_form(form) %}
 <form method="POST">
     <TABLE>
@@ -15,6 +16,13 @@
 {% endmacro %}
 
 
+<!-- part -->
+<!-- 使一個存放html標籤指令的list~實現html標籤指令 -->
+{% macro print_list(html_list) %}
+    {% for i in list %}
+    {{i | safe}}
+    {% endfor %}
+{% endmacro %}
 
 <!-- {% import 'macro.html' as macro %}
-{{ macro.quick_form(form) }}  -->
+{{ macro.print_list(list) }}  -->

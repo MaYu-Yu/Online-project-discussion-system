@@ -1,6 +1,3 @@
-<?php
-	include("db_connect.php");
-?>
 <html>
     <head>
         <meta charset="UTF-8">
@@ -14,7 +11,7 @@
         </p>
         <center>
         <h1>
-            <input type = "button" name="add" value="回到上一頁" onclick="location.href='/parts'">
+            <input type = "button" name="part" value="回到上一頁" onclick="location.href='/part'">
             <input type = "button" name="add" value="新增" onclick="location.href='/add'">
             
             <br>
@@ -25,21 +22,9 @@
                     <td>編輯功能</td>   
                 </tr>
                 
-                <?php
-                    $res = sql_query("SELECT * FROM `user`");
-                    foreach($res as $val) {
-                        ?>
-                        <tr>
-                            <td><?= $val['name']  ?></td>
-                            <td><?= $val['account']  ?></td>
-                            <td>
-                                <a href="update.php?id=<?=$val["id"]?>">修改
-                                <a href="db_delete.php?id=<?=$val["id"]?>">刪除
-                            </td>
-                        </tr>
-                    <?php 
-                    }
-                ?>
+                {% import 'macro.html' as macro %}
+                {{ macro.print_list(html_list) }}
+
             </table>
         </h1>
         </center>
