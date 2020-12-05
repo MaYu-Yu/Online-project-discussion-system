@@ -6,13 +6,13 @@
     <body >
         <center>
         <h3>
-           <a href="user.php">使用者管理</a>
-           <a href="project.php">專案管理</a>
-           <a href="leader.php">組長功能管理</a>
-           <a href="stat.php">統計管理</a>
+           <a href="/user">使用者管理</a>
+           <a href="/proj">專案管理</a>
+           <a href="/leader">組長功能管理</a>
+           <a href="/stat">統計管理</a>
         </h3>
         
-        <form action="db_opinion_add.php" method ="post">
+        <form action="/db_opinion_add" method ="post">
             標題:<input type="text" name="name" ><br>
             說明:<input type="text" name="description"><br>
             <input type ="hidden" name="id" value={{id}}>

@@ -37,12 +37,12 @@
     $res = sql_query("SELECT * FROM `project` WHERE `id` = $id")[0];
     $direction = sql_query("SELECT * FROM `direction` WHERE `direction_id` = $id");
     ?>
-    <form action="db_project_update.php" method="post" name="form1">
+    <form action="/db_project_update" method="post" name="form1">
 
         <center>
             <h1>
                 <p>
-                    <input type="button" value="回到專案管理" onclick="location.href='project.php'">
+                    <input type="button" value="回到專案管理" onclick="location.href='/project'">
                 </p>
                 <p>
                     專案名稱:<input type="text" name="name" value="<?= $res["name"] ?>"><br>

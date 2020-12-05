@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2020-08-24 09:51:11
--- 伺服器版本： 10.4.13-MariaDB
--- PHP 版本： 7.4.8
+-- 產生時間： 2020-12-05 04:56:15
+-- 伺服器版本： 10.4.14-MariaDB
+-- PHP 版本： 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- 資料庫： `taeyeon`
+-- 資料庫： `test`
 --
 
 -- --------------------------------------------------------
@@ -62,8 +62,8 @@ CREATE TABLE `member` (
 --
 
 INSERT INTO `member` (`id`, `project_id`, `user_id`, `type`) VALUES
-(6, 1, 2, 1),
-(7, 1, 4, 2),
+(6, 1, 1, 1),
+(7, 1, 1, 2),
 (8, 1, 5, 2),
 (9, 1, 6, 2),
 (10, 1, 7, 2),

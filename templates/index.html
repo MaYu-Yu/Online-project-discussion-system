@@ -10,15 +10,9 @@
             </h1>
         </p>
         <p>
-        
             <center>
             <h1>
-                <?php
-                    if ($_SESSION['message'] != "") {
-                        echo $_SESSION['message'];
-                        $_SESSION['message'] = "";
-                    }
-                ?>
+                {{meg}}
                 <form action="/login" method="post" name="form1">
                     帳號:<input type="text" name="account" required><br>
                     密碼:<input type="password" name="password" required><br>
