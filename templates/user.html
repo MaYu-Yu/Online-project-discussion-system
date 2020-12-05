@@ -22,8 +22,7 @@
                     <td>編輯功能</td>   
                 </tr>
                 
-                {% import 'macro.html' as macro %}
-                {{ macro.print_list(html_list) }}
+                {{html_list | safe}}
 
             </table>
         </h1>

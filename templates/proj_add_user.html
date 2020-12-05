@@ -25,12 +25,11 @@
 				<p><input type = "button" value = "回到專案管理" onclick="location.href='/project'"></p>
 				<br>
 					<select name = "leader">
-						{% import 'macro.html' as macro %}
-						{{ macro.print_list(html_list) }}
+						{{html_list | safe}}
 					</select>
 					<br>
 					<br>
-						{{ macro.print_list(html_list1) }}
+                    {{html_list1 | safe}}
 				<br>
 
 				<input type="hidden" name = "id" value="{{id}}">

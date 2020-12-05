@@ -13,14 +13,12 @@
         <center>
         <h3>
             <a href="/user">使用者管理</a>discuss
-            <a href="/project">專案管理</a>
+            <a href="/proj">專案管理</a>
             <a href="/leader">組長功能管理</a>
             <a href="/stat">統計管理</a>
             
         </h3>
-        {% import 'macro.html' as macro %}
-        {{ macro.print_list(html_list) }}
-
+        {{html_list | safe}}
         </center>
         
     </body>

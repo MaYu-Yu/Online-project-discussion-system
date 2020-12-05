@@ -1,6 +1,3 @@
-<?php
-	include("db_connect.php");
-?>
 <html>
     <head>
         <meta charset="UTF-8">
@@ -21,8 +18,7 @@
                     <td>專案名稱</td>
                     <td>編輯</td>   
                 </tr>
-                {% import 'macro.html' as macro %}
-                {{ macro.print_list(html_list) }}    
+                {{html_list | safe}} 
             </table>    
         </h1>
         </center>

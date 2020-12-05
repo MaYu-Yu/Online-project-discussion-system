@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, redirect, url_for, session
 import os, sqlite3
 from datetime import timedelta
 
@@ -9,37 +9,37 @@ app.config['SECRET_KEY'] = os.urandom(24)
 #如果設置了 session.permanent 為 True，那麽過期時間是31天
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=31)
 
-db_name = 'taeyeon'
+db_name = 'taeyeon.db'
 
 #最初畫面~登入系統
-@app.route('/index')
+@app.route('/index', methods = ['GET', 'POST'])
 def index():
     meg = ''
     if 'message' in session:
         meg = session.get('message')
     return render_template("index.html", meg=meg)
-@app.route('/login')
+@app.route('/login', methods = ['GET', 'POST'])
 def login():
     account = request.form['account']
     password = request.form['password']
 
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
-        sql = "SELECT user.id FROM `user` where `account` = {} and `password` = {}".format(account, password)
+        sql = "SELECT id FROM `user` where `account` = '{}' and `password` = '{}'".format(account, password)
         cursor.execute(sql)
 
         row = cursor.fetchone()
         if row == None:
-            meg = session['message'] = '登入失敗'
+            session['message'] = '登入失敗'
             session.permanent = True
-            return render_template('/index', meg=meg)
+            return redirect('/index')
         else:
         #把user_id 用 session傳送 
-            meg = session['id'] = row[0]
+            session['id'] = row[0]
             session.permanent = True  
-            return render_template('/part', meg=meg)
+            return redirect('/part')
 #k
-@app.route('/part')
+@app.route('/part', methods = ['GET', 'POST'])
 def part():
     id = session.get('id')
 
@@ -90,7 +90,7 @@ def proj():
         html_list = Proj_list()    
         for row in cursor.fetchall():
             html_list.add(row[0], row[1])
-    return render_template('/proj.html', html_list=html_list)
+    return render_template('proj.html', html_list=html_list)
 #ajax
 @app.route('/proj_add' ,methods = ['GET', 'POST'])
 def proj_add():
@@ -141,9 +141,9 @@ def db_add():
     
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
-        sql = "INSERT INTO `user`(`id`,`name`,`account`,`password`,`type`) VALUES (NULL, {}, {}, {}, '2')".format(name, account, password)
+        sql = "INSERT INTO `user`(`id`,`name`,`account`,`password`,`type`) VALUES (NULL, '{}', '{}', '{}', '2')".format(name, account, password)
         cursor.execute(sql)
-    return render_template('/user')
+    return redirect('/user')
 #k
 @app.route('/db_del' ,methods = ['GET', 'POST'])
 def db_del():
@@ -153,7 +153,7 @@ def db_del():
         cursor = conn.cursor()
         sql = "DELETE FROM `user` WHERE `id` = {}".format(id)
         cursor.execute(sql)
-    return render_template('/user')
+    return redirect('/user')
 #k
 @app.route('/db_update' ,methods = ['GET', 'POST'])
 def db_update():
@@ -162,14 +162,14 @@ def db_update():
     id = request.form["id"]
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()   
-        sql = "UPDATE `user` SET `name` = {}, `password`= {} WHERE `id` = {}".format(name, password, id)
+        sql = "UPDATE `user` SET `name` = '{}', `password`= '{}' WHERE `id` = {}".format(name, password, id)
         cursor.execute(sql)
-    return render_template('/user')
+    return redirect('/user')
 
 #db_proj
 @app.route('/db_proj_del' ,methods = ['GET', 'POST'])
 def db_proj_del():
-    return render_template('/project')
+    return redirect('/proj')
     
 @app.route('/db_proj_add' ,methods = ['GET', 'POST'])
 def db_proj_add():
@@ -188,11 +188,11 @@ def db_proj_add():
     #     $res= sql_query("INSERT INTO `direction` (`id`,`direction_id`, `name`, `description`) VALUES (NULL,'$id' , '{$direction_name[$k]}', '{$direction_description[$k]}')");
     # }
 
-    return render_template('/project')
+    return redirect('/proj')
 
 @app.route('/db_proj_update' ,methods = ['GET', 'POST'])
 def db_proj_update():
-    return render_template('/project')
+    return redirect('/proj')
 @app.route('/db_proj_add_user' ,methods = ['GET', 'POST'])
 def db_proj_add_user():
     leader = request.form["leader"]
@@ -205,12 +205,12 @@ def db_proj_add_user():
         cursor.execute(sql)
         sql = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, '1', '1')".format(id)
         cursor.execute(sql)
-        sql = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, {}, '1')".format(id, leader)
+        sql = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, '{}', '1')".format(id, leader)
         cursor.execute(sql)
         for val in member:
-            sql = ("INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, {}, '2')").format(id, val)
+            sql = ("INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, '{}', '2')").format(id, val)
             cursor.execute(sql)
-    return render_template('/project')
+    return redirect('/proj')
 
 #opinion
 @app.route('/opinion' ,methods = ['GET', 'POST'])
@@ -218,10 +218,10 @@ def opinion():
     return render_template('opinion.html')
 @app.route('/db_opinion' ,methods = ['GET', 'POST'])
 def db_opinion():
-    return render_template('/opinion')
+    return redirect('/opinion')
 @app.route('/db_opinion_add' ,methods = ['GET', 'POST'])
 def db_opinion_add():
-    return render_template('/opinion')
+    return redirect('/opinion')
 
 @app.route('/stat' ,methods = ['GET', 'POST'])
 def stat():

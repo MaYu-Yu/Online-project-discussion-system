@@ -1,7 +1,12 @@
 class Html_list():
-    word = []  
+    def __init__(self):
+        self.word = [] 
     def __str__(self):
-        return self.word
+        html = ''
+        for i in self.word:
+            html +=i
+        return html
+
 #part 
 class Part_list(Html_list):
     def add(self, proj_id, proj_name):
