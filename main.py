@@ -25,7 +25,7 @@ def login():
 
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
-        sql = "SELECT user.id FROM `user` where `account` = {{account}} and `password` = {{password}}"
+        sql = "SELECT user.id FROM `user` where `account` = {} and `password` = {}".format(account, password)
         cursor.execute(sql)
 
         row = cursor.fetchone()
@@ -73,7 +73,7 @@ def update():
     id = request.values.get("id")
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
-        sql = "SELECT name, password, id FROM `user` WHERE `id` = id"
+        sql = "SELECT name, password, id FROM `user` WHERE `id` = {}".format(id)
         cursor.execute(sql)
 
         row = cursor.fetchone()
@@ -125,7 +125,7 @@ def proj_update():
     id = request.values.get("id")
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
-        sql = "SELECT name, password, id FROM `user` WHERE `id` = id"
+        sql = "SELECT name, password, id FROM `user` WHERE `id` = {}".format(id)
         cursor.execute(sql)
 
         row = cursor.fetchone()
