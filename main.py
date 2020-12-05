@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, session
+import os, sqlite3
 from datetime import timedelta
-import os
 
 app = Flask(__name__)
 
@@ -30,14 +30,14 @@ def login():
 
         row = cursor.fetchone()
         if row == None:
-            session['message'] = '登入失敗'
+            meg = session['message'] = '登入失敗'
             session.permanent = True
-            return redirect('/index', meg=meg)
+            return render_template('/index', meg=meg)
         else:
         #把user_id 用 session傳送 
-            session['id'] = row[0]
+            meg = session['id'] = row[0]
             session.permanent = True  
-            return redirect('/part', meg=meg)
+            return render_template('/part', meg=meg)
 #k
 @app.route('/part')
 def part():
@@ -101,7 +101,7 @@ def proj_add():
         cursor.execute(sql)
 
         row = cursor.fetchone()
-    return render_template()  
+    return render_template("")  
 #k
 @app.route('/proj_add_user' ,methods = ['GET', 'POST'])
 def proj_add_user():
@@ -112,7 +112,8 @@ def proj_add_user():
         sql = "SELECT id, name FROM `user` WHERE `id` != '1'"
         cursor.execute(sql)
 
-        from html_list import Proj_list as Proj_list
+        from html_list import Proj_add_user as Proj_add_user
+        from html_list import Proj_add_user1 as Proj_add_user1
         html_list = Proj_add_user()    
         html_list1 = Proj_add_user1()
         for row in cursor.fetchall:
@@ -129,7 +130,7 @@ def proj_update():
         cursor.execute(sql)
 
         row = cursor.fetchone()
-    return render_template()   
+    return render_template("")   
 #db
 #k
 @app.route('/db_add' ,methods = ['GET', 'POST'])
@@ -159,8 +160,10 @@ def db_update():
     name = request.form["name"]
     password = request.form["password"]
     id = request.form["id"]
-    sql = "UPDATE `user` SET `name` = {}, `password`= {} WHERE `id` = {}".format(name, password, id)
-    cursor.execute(sql)
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()   
+        sql = "UPDATE `user` SET `name` = {}, `password`= {} WHERE `id` = {}".format(name, password, id)
+        cursor.execute(sql)
     return render_template('/user')
 
 #db_proj
@@ -202,12 +205,11 @@ def db_proj_add_user():
         cursor.execute(sql)
         sql = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, '1', '1')".format(id)
         cursor.execute(sql)
-        sel = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, {}, '1')".format(id, leader)
+        sql = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, {}, '1')".format(id, leader)
         cursor.execute(sql)
         for val in member:
-            sel = ("INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, {}, '2')").format(id, val)
+            sql = ("INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, {}, '2')").format(id, val)
             cursor.execute(sql)
-        }
     return render_template('/project')
 
 #opinion
