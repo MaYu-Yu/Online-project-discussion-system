@@ -45,7 +45,15 @@ class Proj_add_user1(Html_list):
     def add(self, id, name):
         word = '<input type ="checkbox" name="member" value="{}">{}<br>'.format(id, name)   
         self.word.append(word)
-
+class Proj_update(Html_list):
+    def add(self, direction):
+        word = '''
+            面向名稱：<input type="text" value="{}" name="direction_name[]" required>
+            面向說明：<input type="text" value="{}" name="direction_description[]" required>
+            <input type="hidden" value="{}" name="direction_id[]">
+            <input type="button" class="btn btn-danger" value="X" data-dismiss="alert">
+            '''.format(direction[0], direction[1], direction[2])
+        self.word.append(word)
 #opinion 
 class Opinion_list(Html_list):
     def add(self, id, name, description, date, user_name, scores, people_count):

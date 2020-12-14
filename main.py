@@ -53,7 +53,8 @@ def part():
         for row in cursor.fetchall():
             html_list.add(row[0], row[1])
     return render_template("part.html", html_list=html_list)
-#k
+    
+#user
 @app.route('/user' ,methods = ['GET', 'POST'])
 def user():
     with sqlite3.connect(db_name) as conn:
@@ -82,61 +83,7 @@ def update():
 
         row = cursor.fetchone()
     return render_template("update.html", name=row[0], password=row[1], id=row[2])   
-#k~~
-@app.route('/proj' ,methods = ['GET', 'POST'])
-def proj():
-    with sqlite3.connect(db_name) as conn:
-        cursor = conn.cursor()
-        sql = "SELECT name, id FROM `project`"
-        cursor.execute(sql)
-
-        from html_list import Proj_list as Proj_list
-        html_list = Proj_list()    
-        for row in cursor.fetchall():
-            html_list.add(row[0], row[1])
-    return render_template('proj.html', html_list=html_list)
-#ajax
-@app.route('/proj_add' ,methods = ['GET', 'POST'])
-def proj_add():
-    id = request.values.get("id")
-    with sqlite3.connect(db_name) as conn:
-        cursor = conn.cursor()
-        sql = "SELECT name, password, id FROM `user` WHERE `id` = {}".format(id)
-        cursor.execute(sql)
-
-        row = cursor.fetchone()
-    return render_template("")  
-#k
-@app.route('/proj_add_user' ,methods = ['GET', 'POST'])
-def proj_add_user():
-    id = request.values.get("id")
-
-    with sqlite3.connect(db_name) as conn:
-        cursor = conn.cursor()
-        sql = "SELECT id, name FROM `user` WHERE `id` != '1'"
-        cursor.execute(sql)
-
-        from html_list import Proj_add_user as Proj_add_user
-        from html_list import Proj_add_user1 as Proj_add_user1
-        html_list = Proj_add_user()    
-        html_list1 = Proj_add_user1()
-        for row in cursor.fetchall:
-            html_list.add(row[0], row[1])
-            html_list1.add(row[0], row[1])
-    return render_template("proj_add_user.html", html_list=html_list, html_list1=html_list1, id=id)    
-#ajax
-@app.route('/proj_update' ,methods = ['GET', 'POST'])
-def proj_update():
-    id = request.values.get("id")
-    with sqlite3.connect(db_name) as conn:
-        cursor = conn.cursor()
-        sql = "SELECT name, password, id FROM `user` WHERE `id` = {}".format(id)
-        cursor.execute(sql)
-
-        row = cursor.fetchone()
-    return render_template("")   
-#db
-#k
+#db_user
 @app.route('/db_add' ,methods = ['GET', 'POST'])
 def db_add():
     name = request.form["name"]
@@ -170,32 +117,115 @@ def db_update():
         cursor.execute(sql)
     return redirect('/user')
 
+#proj
+@app.route('/proj' ,methods = ['GET', 'POST'])
+def proj():
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()
+        sql = "SELECT name, id FROM `project`"
+        cursor.execute(sql)
+
+        from html_list import Proj_list as Proj_list
+        html_list = Proj_list()    
+        for row in cursor.fetchall():
+            html_list.add(row[0], row[1])
+    return render_template('proj.html', html_list=html_list)
+#ajax
+@app.route('/proj_add' ,methods = ['GET', 'POST'])
+def proj_add():
+    return render_template("proj_add.html")  
+#k
+@app.route('/proj_add_user' ,methods = ['GET', 'POST'])
+def proj_add_user():
+    id = request.values.get("id")
+
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()
+        sql = "SELECT id, name FROM `user` WHERE `id` != '1'"
+        cursor.execute(sql)
+
+        from html_list import Proj_add_user as Proj_add_user
+        from html_list import Proj_add_user1 as Proj_add_user1
+        html_list = Proj_add_user()    
+        html_list1 = Proj_add_user1()
+        for row in cursor.fetchall:
+            html_list.add(row[0], row[1])
+            html_list1.add(row[0], row[1])
+    return render_template("proj_add_user.html", html_list=html_list, html_list1=html_list1, id=id)    
+#ajax
+@app.route('/proj_update' ,methods = ['GET', 'POST'])
+def proj_update():
+    id = request.values.get("id")
+ 
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()
+    #proj
+        sql = "SELECT name, description, id FROM `project` WHERE `id` = {}".format(id)
+        cursor.execute(sql)
+        row = cursor.fetchone()
+    #direction
+        sql = "SELECT name, description, id FROM `direction` WHERE `direction_id` = {}".format(id)
+        cursor.execute(sql)
+        from html_list import Proj_update as Proj_update
+        html_list = Proj_update()
+        for i in cursor.fetchall:
+            html_list.add(i)
+    return render_template("proj_update.html", name=row[0], description=row[1], id=row[2], html_list=html_list)   
+#db
+#k
+
+
 #db_proj
 @app.route('/db_proj_del' ,methods = ['GET', 'POST'])
 def db_proj_del():
+    id = request.values.get("id")
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()
+        sql = "DELETE FROM `project` WHERE `id` = '{}'".format(id)
+        cursor.execute(sql)
+        sql = "DELETE FROM `direction` WHERE `direction_id`= '{}'".format(id)
+        cursor.execute(sql)
     return redirect('/proj')
-    
+#ajax
 @app.route('/db_proj_add' ,methods = ['GET', 'POST'])
 def db_proj_add():
     name = request.form["name"]
-    description= request["description"]
+    description= request.form["description"]
 
-    # direction_name = request['direction_name']
-    # direction_description = request['direction_description']
-    # direction_id = request['direction_id']
-
-    # sql = "INSERT INTO `project`(`id`,`name`,`description`) VALUES (NULL, name, description)"
-    # id = int(cursor.lastrowid)
-    # sql = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, id,'1','1')"
-
-    # foreach ($direction_id as $k=>$aaaa){
-    #     $res= sql_query("INSERT INTO `direction` (`id`,`direction_id`, `name`, `description`) VALUES (NULL,'$id' , '{$direction_name[$k]}', '{$direction_description[$k]}')");
-    # }
-
+    direction_name = request.form['direction_name']
+    direction_description = request.form['direction_description']
+    direction_id = request.form['direction_id']
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()
+        sql = "INSERT INTO `project`(`id`,`name`,`description`) VALUES (NULL, {}, {})".format(name, description)
+        cursor.execute(sql)
+        id = int(cursor.lastrowid)
+        sql = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, '1', '1')".format(id)
+        cursor.execute(sql)
+        for i in direction_id:
+            sql = "INSERT INTO `direction` (`id`,`direction_id`, `name`, `description`) \
+                VALUES (NULL,'id' , '{}', '{}')".format(direction_name[i], direction_description[i])
+            cursor.execute(sql)
     return redirect('/proj')
 
 @app.route('/db_proj_update' ,methods = ['GET', 'POST'])
 def db_proj_update():
+    name = request.form["name"]
+    description = request.form["description"]
+    id = request.form["id"]
+    direction_name = request.form['direction_name']
+    direction_description = request.form['direction_description']
+    direction_id = request.form['direction_id']
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()
+        sql = "DELETE FROM `direction` WHERE `direction_id`='{}'".format(id)
+        cursor.execute(sql)
+        sql = "UPDATE `project` SET `name` = '{}',`description`='{}' WHERE `id` = '{}'".format(name, description, id)
+        cursor.execute(sql)
+        for i in direction_id:
+            sql = "INSERT INTO `direction` (`id`,`direction_id`, `name`, `description`) \
+                VALUES (NULL,'id' , '{}', '{}')".format(direction_name[i], direction_description[i])
+            cursor.execute(sql)
     return redirect('/proj')
 @app.route('/db_proj_add_user' ,methods = ['GET', 'POST'])
 def db_proj_add_user():
