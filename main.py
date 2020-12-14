@@ -68,6 +68,10 @@ def user():
 
     return render_template("user.html", html_list=html_list)  
 #k
+@app.route('/add' ,methods = ['GET', 'POST'])
+def add():
+    return render_template("add.html")   
+#k
 @app.route('/update' ,methods = ['GET', 'POST'])
 def update():
     id = request.values.get("id")
@@ -215,7 +219,20 @@ def db_proj_add_user():
 #opinion
 @app.route('/opinion' ,methods = ['GET', 'POST'])
 def opinion():
-    return render_template('opinion.html')
+    with sqlite3.connect(db_name) as conn:
+        from html_list import Opinion_list as Opinion_list
+        html_list = Opinion_list()
+
+        cursor = conn.cursor()   
+        sql = "SELECT user_id FROM `opinion`"
+        cursor.execute(sql)
+        
+        for row in cursor.fetchall:
+            sql = "SELECT name FROM `user` WHERE `id` = {}".format(row[0])
+            cursor.execute(sql)
+            user_name = cursor.fetchone[0]
+            html_list.add(row[1], row[2], row[3], row[4], user_name, row[5], row[6])
+    return render_template('opinion.html', html_list=html_list)
 @app.route('/db_opinion' ,methods = ['GET', 'POST'])
 def db_opinion():
     return redirect('/opinion')

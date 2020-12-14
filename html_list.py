@@ -45,3 +45,16 @@ class Proj_add_user1(Html_list):
     def add(self, id, name):
         word = '<input type ="checkbox" name="member" value="{}">{}<br>'.format(id, name)   
         self.word.append(word)
+
+#opinion 
+class Opinion_list(Html_list):
+    def add(self, id, name, description, date, user_name, scores, people_count):
+        word = '''<tr>
+        <td align ="center">{}</td>
+        <td align ="center">{}</td>
+        <td align ="center">{}</td>
+        <td align ="center">{}</td>
+        <td align ="center">{}</td>
+        <td align ="center">{}</td>
+        <td align ="center">{}</td>'''.format(id, name, description, date, user_name, scores, people_count)
+        self.word.append(word)
