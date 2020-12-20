@@ -53,7 +53,7 @@ def part():
         for row in cursor.fetchall():
             html_list.add(row[0], row[1])
     return render_template("part.html", html_list=html_list)
-    
+
 #user
 @app.route('/user' ,methods = ['GET', 'POST'])
 def user():
@@ -148,7 +148,7 @@ def proj_add_user():
         from html_list import Proj_add_user1 as Proj_add_user1
         html_list = Proj_add_user()    
         html_list1 = Proj_add_user1()
-        for row in cursor.fetchall:
+        for row in cursor.fetchall():
             html_list.add(row[0], row[1])
             html_list1.add(row[0], row[1])
     return render_template("proj_add_user.html", html_list=html_list, html_list1=html_list1, id=id)    
@@ -168,13 +168,9 @@ def proj_update():
         cursor.execute(sql)
         from html_list import Proj_update as Proj_update
         html_list = Proj_update()
-        for i in cursor.fetchall:
+        for i in cursor.fetchall():
             html_list.add(i)
     return render_template("proj_update.html", name=row[0], description=row[1], id=row[2], html_list=html_list)   
-#db
-#k
-
-
 #db_proj
 @app.route('/db_proj_del' ,methods = ['GET', 'POST'])
 def db_proj_del():
@@ -207,7 +203,6 @@ def db_proj_add():
                 VALUES (NULL,'id' , '{}', '{}')".format(direction_name[i], direction_description[i])
             cursor.execute(sql)
     return redirect('/proj')
-
 @app.route('/db_proj_update' ,methods = ['GET', 'POST'])
 def db_proj_update():
     name = request.form["name"]
@@ -235,7 +230,7 @@ def db_proj_add_user():
 
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
-        sql = "DELETE FROM `member` WHERE project_id = 'id "
+        sql = "DELETE FROM `member` WHERE project_id = {} ".format(id)
         cursor.execute(sql)
         sql = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, '1', '1')".format(id)
         cursor.execute(sql)
@@ -257,12 +252,16 @@ def opinion():
         sql = "SELECT user_id FROM `opinion`"
         cursor.execute(sql)
         
-        for row in cursor.fetchall:
+        for row in cursor.fetchall():
             sql = "SELECT name FROM `user` WHERE `id` = {}".format(row[0])
             cursor.execute(sql)
             user_name = cursor.fetchone[0]
             html_list.add(row[1], row[2], row[3], row[4], user_name, row[5], row[6])
     return render_template('opinion.html', html_list=html_list)
+@app.route('/opinion_add' ,methods = ['GET', 'POST'])
+def opinion_add():
+    return render_template('opinion_add.html')
+#db_opinion
 @app.route('/db_opinion' ,methods = ['GET', 'POST'])
 def db_opinion():
     return redirect('/opinion')
