@@ -2,11 +2,8 @@
     <head>
         <meta charset="UTF-8" />
         <title>新增專案</title>
-
-        <script src="jquery-3.4.1.min.js"></script>
-        <script src="bootstrap.min.js"></script>
-        <link rel="stylesheet" href="bootstrap.min.css">
-        <link rel="stylesheet" href="bootstrap-responsive.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        
     </head>
     <script>
         $(function () {
@@ -15,7 +12,7 @@
                     alert("超過上限");
                 } else {
                     $.ajax({
-                        url: 'aaa.html',
+                        url: '/face_add',
                         type: 'get',
                         success: function (data){
                             $(".face_div").append(data);

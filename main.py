@@ -18,6 +18,9 @@ def index():
     if 'message' in session:
         meg = session.get('message')
     return render_template("index.html", meg=meg)
+@app.route('/face_add', methods = ['GET', 'POST'])
+def face_add():
+    return render_template("aaa.html")
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     account = request.form['account']
