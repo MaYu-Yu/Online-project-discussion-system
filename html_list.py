@@ -20,7 +20,7 @@ class User_list(Html_list):
             <td>{}</td>
             <td>
                 <a href="/update?id={}">修改
-                <a href="/db_delete?id={}">刪除
+                <a href="/db_del?id={}">刪除
             </td>
         </tr>'''.format(name, account, id, id)
         self.word.append(word)
@@ -43,16 +43,33 @@ class Proj_add_user(Html_list):
         self.word.append(word)
 class Proj_add_user1(Html_list):
     def add(self, id, name):
-        word = '<input type ="checkbox" name="member" value="{}">{}<br>'.format(id, name)   
+        word = '<input id={} type ="checkbox" name="member[]" value="{}" onclick= "send();">{}<br>'.format(name, id, name)   
         self.word.append(word)
+
 class Proj_update(Html_list):
     def add(self, direction):
         word = '''
-            面向名稱：<input type="text" value="{}" name="direction_name[]" required>
+            <p>面向名稱：<input type="text" value="{}" name="direction_name[]" required>
             面向說明：<input type="text" value="{}" name="direction_description[]" required>
             <input type="hidden" value="{}" name="direction_id[]">
-            <input type="button" class="btn btn-danger" value="X" data-dismiss="alert">
+            <input type="button" class="btn btn-danger" value="X" data-dismiss="alert"></p>
             '''.format(direction[0], direction[1], direction[2])
+        self.word.append(word)
+
+#discuss
+class Discuss_list(Html_list):
+    def add(self, name):
+        word = "專案名稱: {}".format(name) 
+        self.word.append(word)
+class Discuss_list1(Html_list):
+    def add(self, name, description, id):
+        word ='''<div>
+                    <tr>
+                        <td>{}</td>
+                        <td>{}</td>
+                        <td><button onclick="location.href='/opinion?id={}'">討論</td>
+                    </tr>
+                </div>'''.format(name, description, id)
         self.word.append(word)
 #opinion 
 class Opinion_list(Html_list):

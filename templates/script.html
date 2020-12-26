@@ -1,0 +1,19 @@
+{% macro face_add() %}
+<script>
+    $(function () {
+        $(".face_add").click(function () {
+            if ($(".face_div").children().length == 10) {
+                alert("超過上限");
+            } else {
+                $.ajax({
+                    url: '/face_add',
+                    type: 'get',
+                    success: function (data){
+                        $(".face_div").append(data);
+                    }
+                })
+            }
+        })
+    })
+</script>
+{% endmacro %}

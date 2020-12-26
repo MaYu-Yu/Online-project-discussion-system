@@ -12,15 +12,14 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=31)
 db_name = 'taeyeon.db'
 
 #最初畫面~登入系統
-@app.route('/index', methods = ['GET', 'POST'])
+@app.route('/', methods = ['GET', 'POST'])
 def index():
     meg = ''
     if 'message' in session:
         meg = session.get('message')
     return render_template("index.html", meg=meg)
 @app.route('/face_add', methods = ['GET', 'POST'])
-def face_add():
-    return render_template("aaa.html")
+
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     account = request.form['account']
@@ -35,7 +34,7 @@ def login():
         if row == None:
             session['message'] = '登入失敗'
             session.permanent = True
-            return redirect('/index')
+            return redirect('/')
         else:
         #把user_id 用 session傳送 
             session['id'] = row[0]
@@ -56,13 +55,39 @@ def part():
         for row in cursor.fetchall():
             html_list.add(row[0], row[1])
     return render_template("part.html", html_list=html_list)
+@app.route('/discuss', methods = ['GET', 'POST'])
+def discuss():
+    id = request.values.get("id")
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()
+    #get 專案名稱
+        sql = "SELECT name FROM `project` where `id` = '{}'".format(id)
+        cursor.execute(sql)
+        from html_list import Discuss_list as Discuss_list
+        html_list = Discuss_list()
+        for row in cursor.fetchall():
+            html_list.add(row[0])
 
+        sql = "SELECT name, description, id FROM `direction` where `direction_id` = '{}'".format(id)
+        cursor.execute(sql)
+        from html_list import Discuss_list1 as Discuss_list1
+        html_list1 = Discuss_list1()
+        for row in cursor.fetchall():
+            html_list1.add(row[0], row[1], row[2])
+    return render_template("discuss.html", html_list=html_list, html_list1=html_list1)
+def face_add():
+    return render_template("aaa.html")
 #user
 @app.route('/user' ,methods = ['GET', 'POST'])
 def user():
+    id = session.get('id')
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
+        
         sql = "SELECT name, account, id FROM `user`"
+    #一般權限防呆
+        if id != 1:
+            sql += "WHERE id = {}".format(id)
         cursor.execute(sql)
 
         from html_list import User_list as User_list
@@ -92,9 +117,14 @@ def db_add():
     name = request.form["name"]
     account = request.form["account"]
     password = request.form["password"]
-    
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
+    #if帳號一樣
+        sql = "SELECT account FROM `user`"
+        cursor.execute(sql)
+        for row in cursor.fetchall():
+            if row[0] == account:
+                return render_template("add.html", meg="已經有相同帳號了，請重新輸入")   
         sql = "INSERT INTO `user`(`id`,`name`,`account`,`password`,`type`) VALUES (NULL, '{}', '{}', '{}', '2')".format(name, account, password)
         cursor.execute(sql)
     return redirect('/user')
@@ -155,7 +185,7 @@ def proj_add_user():
             html_list.add(row[0], row[1])
             html_list1.add(row[0], row[1])
     return render_template("proj_add_user.html", html_list=html_list, html_list1=html_list1, id=id)    
-#ajax
+
 @app.route('/proj_update' ,methods = ['GET', 'POST'])
 def proj_update():
     id = request.values.get("id")
@@ -190,20 +220,19 @@ def db_proj_del():
 def db_proj_add():
     name = request.form["name"]
     description= request.form["description"]
-
-    direction_name = request.form['direction_name']
-    direction_description = request.form['direction_description']
-    direction_id = request.form['direction_id']
+    direction_name = request.form.getlist('direction_name[]')
+    direction_description = request.form.getlist('direction_description[]')
+    direction_id = request.form.getlist('direction_id[]')
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
-        sql = "INSERT INTO `project`(`id`,`name`,`description`) VALUES (NULL, {}, {})".format(name, description)
+        sql = "INSERT INTO `project`(`id`,`name`,`description`) VALUES (NULL, '{}', '{}')".format(name, description)
         cursor.execute(sql)
         id = int(cursor.lastrowid)
         sql = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, '1', '1')".format(id)
         cursor.execute(sql)
-        for i in direction_id:
+        for i in range(len(direction_id) ):
             sql = "INSERT INTO `direction` (`id`,`direction_id`, `name`, `description`) \
-                VALUES (NULL,'id' , '{}', '{}')".format(direction_name[i], direction_description[i])
+                VALUES (NULL, {} , '{}', '{}')".format(id, direction_name[i], direction_description[i])
             cursor.execute(sql)
     return redirect('/proj')
 @app.route('/db_proj_update' ,methods = ['GET', 'POST'])
@@ -211,24 +240,24 @@ def db_proj_update():
     name = request.form["name"]
     description = request.form["description"]
     id = request.form["id"]
-    direction_name = request.form['direction_name']
-    direction_description = request.form['direction_description']
-    direction_id = request.form['direction_id']
+    direction_name = request.form.getlist('direction_name[]')
+    direction_description = request.form.getlist('direction_description[]')
+    direction_id = request.form.getlist('direction_id[]')
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
         sql = "DELETE FROM `direction` WHERE `direction_id`='{}'".format(id)
         cursor.execute(sql)
-        sql = "UPDATE `project` SET `name` = '{}',`description`='{}' WHERE `id` = '{}'".format(name, description, id)
+        sql = "UPDATE `project` SET `name` = '{}',`description`='{}' WHERE `id` = {}".format(name, description, id)
         cursor.execute(sql)
-        for i in direction_id:
+        for i in range(len(direction_id) ):
             sql = "INSERT INTO `direction` (`id`,`direction_id`, `name`, `description`) \
-                VALUES (NULL,'id' , '{}', '{}')".format(direction_name[i], direction_description[i])
+                VALUES (NULL, '{}' , '{}', '{}')".format(id, direction_name[i], direction_description[i])
             cursor.execute(sql)
     return redirect('/proj')
 @app.route('/db_proj_add_user' ,methods = ['GET', 'POST'])
 def db_proj_add_user():
     leader = request.form["leader"]
-    member = request.form["member"]
+    member = request.form.getlist("member[]")
     id = request.form["id"]
 
     with sqlite3.connect(db_name) as conn:
@@ -276,6 +305,11 @@ def db_opinion_add():
 def stat():
     return 0
 
+
+def data_is_OK(data):
+    if data == None or data == '' or data.strip() == None :
+        return False
+    return True
 if __name__ == "__main__":
     app.run(host='localhost', port=10723, debug=True)
 #return render_template(".html",username=request.values.get("Username"))      

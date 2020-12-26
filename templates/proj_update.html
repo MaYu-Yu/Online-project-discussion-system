@@ -5,24 +5,8 @@
     <title>專案修改</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
-<script>
-        $(function () {
-            $(".face_add").click(function () {
-                if ($(".face_div").children().length == 10) {
-                    alert("超過上限");
-                } else {
-                    $.ajax({
-                        url: '/face_add',
-                        type: 'get',
-                        success: function (data){
-                            $(".face_div").append(data);
-                        }
-                    })
-                }
-            })
-        })
-        
-</script>
+{% import 'script.html' as script %}
+{{ script.face_add() }}
 <body>
     <p>
         <h1>

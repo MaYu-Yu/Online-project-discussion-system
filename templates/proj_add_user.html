@@ -1,43 +1,62 @@
+
 <html>
+
     <head>
         <meta charset="UTF-8" />
         <title>新增專案管理者</title>
-
+    
         <script src="jquery-3.4.1.min.js"></script>
         <script src="bootstrap.min.js"></script>
         <link rel="stylesheet" href="bootstrap.min.css">
         <link rel="stylesheet" href="bootstrap-responsive.min.css">
     </head>
     <script>
+        function print_value() {
+            document.getElementById("result").innerHTML = document.getElementById("leader").value
+        }
+    </script>
+    <script>
+        function send(){
+            var leader = document.getElementById("leader").value
+            var member = document.getElementsByName('member');
+            var value = new Array();
+            for(var i = 0; i < member.length; i  ){
+                if(member[i].checked && member[i] == leader)
+                    alert("bang")
+                } 
             
-    
+            }
     </script>
     <body>
+    
         <p>
-            <h1>
-                <center><b>新增專案管理者</b></center>
-            </h1>
-		</p>
-	
-        <form action="/db_proj_add_user" method="post">
-            <center>
-            <h1>
-				<br>
-				<p><input type = "button" value = "回到專案管理" onclick="location.href='/proj'"></p>
-				<br>
-					<select name = "leader">
-						{{html_list | safe}}
-					</select>
-					<br>
-					<br>
+        <h1>
+            <center><b>新增專案管理者</b></center>
+        </h1>
+        </p>
+        <center>
+    
+            <form action="/db_proj_add_user" method="post">
+    
+                <h1>
+                    <br>
+                    <p><input type="button" value="回到專案管理" onclick="location.href='/proj'"></p>
+                    <br>
+                    <select id="leader" name="leader" onchange="print_value();">
+                        {{html_list | safe}}
+                    </select>
+                    <br>
+                    <br>
                     {{html_list1 | safe}}
-				<br>
-
-				<input type="hidden" name = "id" value="{{id}}">
-                <input type = "submit" value="新增資料"><input type = "reset" value="重新輸入">
-            </h1>
-            </center>
-        </form>
-
+                    <br>
+                    <input type="hidden" name="id" value="{{id}}">
+                    <input type="submit" value="新增資料" ><input type="reset" value="重新輸入">
+                </h1>
+            </form>
+        </center>
+        <!-- 印出結果 -->
+        <div id="result"></div>
     </body>
-</html>
+
+    </html>        
+
