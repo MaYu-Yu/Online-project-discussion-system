@@ -171,21 +171,28 @@ def proj_add():
 @app.route('/proj_add_user' ,methods = ['GET', 'POST'])
 def proj_add_user():
     id = request.values.get("id")
-
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
         sql = "SELECT id, name FROM `user` WHERE `id` != '1'"
         cursor.execute(sql)
-
         from html_list import Proj_add_user as Proj_add_user
-        from html_list import Proj_add_user1 as Proj_add_user1
         html_list = Proj_add_user()    
-        html_list1 = Proj_add_user1()
         for row in cursor.fetchall():
-            html_list.add(row[0], row[1])
-            html_list1.add(row[0], row[1])
-    return render_template("proj_add_user.html", html_list=html_list, html_list1=html_list1, id=id)    
-
+            html_list.add(row[0], row[1])     
+    return render_template("proj_add_user.html", html_list=html_list, id=id)    
+@app.route('/proj_add_member' ,methods = ['GET', 'POST'])
+def proj_add_member():
+    id = request.form["id"]
+    leader = request.form["leader"]
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()
+        sql = "SELECT id, name FROM `user` WHERE `id` != '1' AND `id` != '{}'".format(leader)
+        cursor.execute(sql)
+        from html_list import Proj_add_member as Proj_add_member
+        html_list = Proj_add_member()
+        for row in cursor.fetchall():
+            html_list.add(row[0], row[1])     
+    return render_template("proj_add_member.html", html_list=html_list, leader=leader, id=id)      
 @app.route('/proj_update' ,methods = ['GET', 'POST'])
 def proj_update():
     id = request.values.get("id")
@@ -258,7 +265,7 @@ def db_proj_update():
 def db_proj_add_user():
     leader = request.form["leader"]
     member = request.form.getlist("member[]")
-    id = request.form["id"]
+    id = int(request.form["id"])
 
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()

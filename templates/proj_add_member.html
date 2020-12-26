@@ -1,0 +1,37 @@
+
+<html>
+
+    <head>
+        <meta charset="UTF-8" />
+        <title>選擇專案成員</title>
+    
+        <script src="jquery-3.4.1.min.js"></script>
+        <script src="bootstrap.min.js"></script>
+        <link rel="stylesheet" href="bootstrap.min.css">
+        <link rel="stylesheet" href="bootstrap-responsive.min.css">
+    </head>
+    <body>
+        <p>
+        <h1>
+            <center><b>選擇專案成員</b></center>
+        </h1>
+        </p>
+        <center>
+    
+            <form action="/db_proj_add_user" method="post">
+                <p><input type="button" value="回到專案管理" onclick="location.href='/proj'"></p>
+                
+                <h1>
+                    {{html_list | safe}}
+                </h1>
+                <input type="hidden" name="leader" value="{{leader}}">
+                <input type="hidden" name="id" value="{{id}}">
+                <input type="submit" value="新增資料" >
+                <input type="reset" value="重新選擇">
+                <input type="button" value="重選組長" onclick="location.href='/proj_add_user?{{id}}'">
+                
+            </form>
+        </center>
+    </body>
+</html>        
+

@@ -36,16 +36,17 @@ class Proj_list(Html_list):
             </td>
         </tr>'''.format(name, id, id, id)
         self.word.append(word)
-
+#Proj_add_user
 class Proj_add_user(Html_list):
     def add(self, id, name):
-        word = '<option value = "{}">{}</option>'.format(id, name)
+        #word = '<option value = "{}">{}</option>'.format(id, name)
+        word = '<input type ="radio" name="leader" value="{}">{}<br>'.format(id, name)   
         self.word.append(word)
-class Proj_add_user1(Html_list):
+class Proj_add_member(Html_list):
     def add(self, id, name):
-        word = '<input id={} type ="checkbox" name="member[]" value="{}" onclick= "send();">{}<br>'.format(name, id, name)   
+        word = '<input type ="checkbox" name="member[]" value="{}">{}<br>'.format(id, name)   
         self.word.append(word)
-
+#Proj_update
 class Proj_update(Html_list):
     def add(self, direction):
         word = '''
