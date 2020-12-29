@@ -177,6 +177,17 @@ ALTER TABLE `member`
 ALTER TABLE `project`
   ADD PRIMARY KEY (`id`);
 
+-- 資料表索引 `face`
+--
+ALTER TABLE `face`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- 資料表索引 `opinion`
+--
+ALTER TABLE `opinion`
+  ADD PRIMARY KEY (`id`);
+
 --
 -- 資料表索引 `user`
 --
@@ -205,6 +216,17 @@ ALTER TABLE `member`
 ALTER TABLE `project`
   MODIFY `id` tinyint(1) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
+-- 使用資料表自動遞增(AUTO_INCREMENT) `face`
+--
+ALTER TABLE `face`
+  MODIFY `id` tinyint(1) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `opinion`
+--
+ALTER TABLE `opinion`
+  MODIFY `id` tinyint(1) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `user`
 --
