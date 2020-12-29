@@ -14,11 +14,10 @@ db_name = 'taeyeon.db'
 #最初畫面~登入系統
 @app.route('/', methods = ['GET', 'POST'])
 def index():
-    meg = ''
+    msg = ''
     if 'message' in session:
-        meg = session.get('message')
-    return render_template("index.html", meg=meg)
-@app.route('/face_add', methods = ['GET', 'POST'])
+        msg = session.get('message')
+    return render_template("index.html", msg=msg)
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -75,6 +74,8 @@ def discuss():
         for row in cursor.fetchall():
             html_list1.add(row[0], row[1], row[2])
     return render_template("discuss.html", html_list=html_list, html_list1=html_list1)
+
+@app.route('/face_add', methods = ['GET', 'POST'])
 def face_add():
     return render_template("aaa.html")
 #user
@@ -117,6 +118,9 @@ def db_add():
     name = request.form["name"]
     account = request.form["account"]
     password = request.form["password"]
+    if data_False(name) or data_False(account) or data_False(password):
+        return render_template("add.html", msg="欄位中含有非法字元！")
+    
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
     #if帳號一樣
@@ -124,14 +128,14 @@ def db_add():
         cursor.execute(sql)
         for row in cursor.fetchall():
             if row[0] == account:
-                return render_template("add.html", meg="已經有相同帳號了，請重新輸入")   
+                return render_template("add.html", msg="已經有相同帳號了，請重新輸入")   
         sql = "INSERT INTO `user`(`id`,`name`,`account`,`password`,`type`) VALUES (NULL, '{}', '{}', '{}', '2')".format(name, account, password)
         cursor.execute(sql)
     return redirect('/user')
 #k
 @app.route('/db_del' ,methods = ['GET', 'POST'])
 def db_del():
-    id = request.values.get["id"]
+    id = request.values.get("id")
     
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
@@ -144,6 +148,8 @@ def db_update():
     name = request.form["name"]
     password = request.form["password"]
     id = request.form["id"]
+    if data_False(name) or data_False(password):
+        return render_template("update.html", name=name, paaword=password, id=id, msg="欄位中含有非法字元！")
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()   
         sql = "UPDATE `user` SET `name` = '{}', `password`= '{}' WHERE `id` = {}".format(name, password, id)
@@ -247,6 +253,7 @@ def db_proj_update():
     name = request.form["name"]
     description = request.form["description"]
     id = request.form["id"]
+
     direction_name = request.form.getlist('direction_name[]')
     direction_description = request.form.getlist('direction_description[]')
     direction_id = request.form.getlist('direction_id[]')
@@ -313,10 +320,10 @@ def stat():
     return 0
 
 
-def data_is_OK(data):
-    if data == None or data == '' or data.strip() == None :
-        return False
-    return True
+def data_False(data):
+    if data.strip() == '' :
+        return True
+    return False
 if __name__ == "__main__":
     app.run(host='localhost', port=10723, debug=True)
 #return render_template(".html",username=request.values.get("Username"))      

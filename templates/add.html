@@ -9,7 +9,8 @@
                 <center><b>新增使用者</b></center>
             </h1>
         </p>
-        <h2 style="color: red;">{{meg}}</h2>
+        {% import 'script.html' as script %}
+        {{ script.debug_msg(msg) }}
         <form action="/db_add" method="post">
             <table border="1" align = "center">
                 <center>
@@ -23,16 +24,16 @@
                         </tr>
                         <tr>
                             <td>使用者名稱</td>
-                            <td><input type = "text" name = "name"></td>
+                            <td><input type = "text" name = "name" required></td>
                         </tr>
                         
                         <tr>
                             <td>使用者帳號</td>
-                            <td><input type = "text" name = "account"></td>
+                            <td><input type = "text" name = "account" required></td>
                         </tr>
                         <tr>
                             <td>使用者密碼</td>
-                            <td><input type = "text" name = "password"></td>
+                            <td><input type = "text" name = "password" required></td>
                         </tr>
                         <tr>
                             <td align = "center" colspan = "2"><input type = "submit" value="新增資料"><input type = "reset" value="重新輸入"></td>

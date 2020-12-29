@@ -1,19 +1,23 @@
 {% macro face_add() %}
-<script>
-    $(function () {
-        $(".face_add").click(function () {
-            if ($(".face_div").children().length == 10) {
-                alert("超過上限");
-            } else {
-                $.ajax({
-                    url: '/face_add',
-                    type: 'get',
-                    success: function (data){
-                        $(".face_div").append(data);
-                    }
-                })
-            }
+    <script>
+        $(function () {
+            $(".face_add").click(function () {
+                if ($(".face_div").children().length == 10) {
+                    alert("超過上限");
+                } else {
+                    $.ajax({
+                        url: '/face_add',
+                        type: 'get',
+                        success: function (data){
+                            $(".face_div").append(data);
+                        }
+                    })
+                }
+            })
         })
-    })
-</script>
+    </script>
+{% endmacro %}
+
+{% macro debug_msg(msg) %}
+    <center><h2 style="color: red;">{{msg}}</h2></center>
 {% endmacro %}

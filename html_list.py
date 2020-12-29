@@ -18,11 +18,10 @@ class User_list(Html_list):
         word = '''<tr>
             <td>{}</td>
             <td>{}</td>
-            <td>
-                <a href="/update?id={}">修改
-                <a href="/db_del?id={}">刪除
-            </td>
-        </tr>'''.format(name, account, id, id)
+            <td><a href="/update?id={}">修改'''.format(name, account, id)
+        if id != 1:
+            word += '<a href="/db_del?id={}">刪除'.format(id)
+        word += "</td></tr>"
         self.word.append(word)
 #proj
 class Proj_list(Html_list):

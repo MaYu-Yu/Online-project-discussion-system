@@ -9,6 +9,8 @@
                 <center><b>使用者修改</b></center>
             </h1>
         </p>
+        {% import 'script.html' as script %}
+        {{ script.debug_msg(msg) }}
         <form action="/db_update" method="post">
             <table border="1" align = "center">
                 <center>
@@ -22,11 +24,11 @@
                         </tr>
                         <tr>
                             <td>使用者名稱</td>
-                            <td><input type = "text" name = "name" value = "{{name}}"></td>
+                            <td><input type = "text" name = "name" value = "{{name}}" required></td>
                         </tr>
                         <tr>
                             <td>密碼</td>
-                            <td><input type = "text" name = "password" value = "{{password}}"></td>
+                            <td><input type = "text" name = "password" value = "{{password}}" required></td>
                             <td><input type = "hidden" name = "id" value = "{{id}}"></td>
                         </tr>
                         <tr>
