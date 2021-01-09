@@ -1,31 +1,87 @@
+{% import 'script.html' as script %}
+{{ script.import_css()}}
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>意見</title>
-        
-    </head>
-    <body >
-        <center>
+
+<head>
+    <meta charset="UTF-8">
+    <title>意見</title>
+
+</head>
+
+<body>
+    <center>
         <h3>
-           <a href="/user">使用者管理</a>
-           <a href="/project">專案管理</a>
-           <a href="/stat">統計管理</a>
+            <a href="/part">回到主頁面</a>
+            <a href="/user">使用者管理</a>
+            <a href="/project">專案管理</a>
         </h3>
-        <div><button onclick="location.href='/opinion_add?id={{id}}'">發表意見</div>
-        <table border ="1">
-            <tr>
-                <td>編號</td>
-                <td>標題</td>
-                <td>說明</td>
-                <td>發表日期</td>
-                <td>發表者的名稱</td>
-                <td>平均分數</td>
-                <td>評價人數</td>
-                <td>功能</td>
-            </tr>
-            {{ html_list | safe}}
-        </table>
-        </center>
-        
-    </body>
+        <div><button onclick="location.href='/opinion_add?direction_id={{direction_id}}'">發表意見</div></br>
+        <form action="/score?direction_id={{direction_id}}?" method="post">
+            <table border="1">
+                <tr>
+                    <td>編號</td>
+                    <td>標題</td>
+                    <td>說明</td>
+                    <td>發表日期</td>
+                    <td>發表者的名稱</td>
+                    <td>平均分數</td>
+                    <td>評價人數</td>
+                    <td>評分</td>
+                </tr>
+                {{ html_list | safe}}
+            </table>
+            <input type="submit" value="送出評分">
+        </form>
+    </center>
+    <style>
+        .txt-center {
+            text-align: center;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .clear {
+            float: none;
+            clear: both;
+        }
+
+        .rating {
+            width: 90px;
+            unicode-bidi: bidi-override;
+            direction: rtl;
+            text-align: center;
+            position: relative;
+        }
+
+        .rating>label {
+            float: right;
+            display: inline;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            width: 1em;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .rating>label:hover,
+        .rating>label:hover~label,
+        .rating>input.radio-btn:checked~label {
+            color: transparent;
+        }
+
+        .rating>label:hover:before,
+        .rating>label:hover~label:before,
+        .rating>input.radio-btn:checked~label:before,
+        .rating>input.radio-btn:checked~label:before {
+            content: "\2605";
+            position: absolute;
+            left: 0;
+            color: #FFD700;
+        }
+    </style>
+</body>
+
 </html>

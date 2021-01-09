@@ -68,7 +68,7 @@ def discuss():
         for row in cursor.fetchall():
             html_list.add(row[0])
 
-        sql = "SELECT name, description, id FROM `direction` where `direction_id` = '{}'".format(id)
+        sql = "SELECT name, description, id FROM `direction` where `proj_id` = '{}'".format(id)
         cursor.execute(sql)
         from html_list import Discuss_list1 as Discuss_list1
         html_list1 = Discuss_list1()
@@ -212,7 +212,7 @@ def proj_update():
         cursor.execute(sql)
         row = cursor.fetchone()
     #direction
-        sql = "SELECT name, description, id FROM `direction` WHERE `direction_id` = {}".format(id)
+        sql = "SELECT name, description, id FROM `direction` WHERE `proj_id` = {}".format(id)
         cursor.execute(sql)
         from html_list import Proj_update as Proj_update
         html_list = Proj_update()
@@ -227,7 +227,7 @@ def db_proj_del():
         cursor = conn.cursor()
         sql = "DELETE FROM `project` WHERE `id` = '{}'".format(id)
         cursor.execute(sql)
-        sql = "DELETE FROM `direction` WHERE `direction_id`= '{}'".format(id)
+        sql = "DELETE FROM `direction` WHERE `proj_id`= '{}'".format(id)
         cursor.execute(sql)
     return redirect('/proj')
 #ajax
@@ -237,7 +237,7 @@ def db_proj_add():
     description= request.form["description"]
     direction_name = request.form.getlist('direction_name[]')
     direction_description = request.form.getlist('direction_description[]')
-    direction_id = request.form.getlist('direction_id[]')
+    proj_id = request.form.getlist('proj_id[]')
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
         sql = "INSERT INTO `project`(`id`,`name`,`description`) VALUES (NULL, '{}', '{}')".format(name, description)
@@ -245,8 +245,8 @@ def db_proj_add():
         id = int(cursor.lastrowid)
         sql = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, '1', '1')".format(id)
         cursor.execute(sql)
-        for i in range(len(direction_id) ):
-            sql = "INSERT INTO `direction` (`id`,`direction_id`, `name`, `description`) \
+        for i in range(len(proj_id) ):
+            sql = "INSERT INTO `direction` (`id`,`proj_id`, `name`, `description`) \
                 VALUES (NULL, {} , '{}', '{}')".format(id, direction_name[i], direction_description[i])
             cursor.execute(sql)
     return redirect('/proj')
@@ -258,15 +258,15 @@ def db_proj_update():
 
     direction_name = request.form.getlist('direction_name[]')
     direction_description = request.form.getlist('direction_description[]')
-    direction_id = request.form.getlist('direction_id[]')
+    proj_id = request.form.getlist('proj_id[]')
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
-        sql = "DELETE FROM `direction` WHERE `direction_id`='{}'".format(id)
+        sql = "DELETE FROM `direction` WHERE `proj_id`='{}'".format(id)
         cursor.execute(sql)
         sql = "UPDATE `project` SET `name` = '{}',`description`='{}' WHERE `id` = {}".format(name, description, id)
         cursor.execute(sql)
-        for i in range(len(direction_id) ):
-            sql = "INSERT INTO `direction` (`id`,`direction_id`, `name`, `description`) \
+        for i in range(len(proj_id) ):
+            sql = "INSERT INTO `direction` (`id`,`proj_id`, `name`, `description`) \
                 VALUES (NULL, '{}' , '{}', '{}')".format(id, direction_name[i], direction_description[i])
             cursor.execute(sql)
     return redirect('/proj')
@@ -292,35 +292,75 @@ def db_proj_add_user():
 #opinion
 @app.route('/opinion' ,methods = ['GET', 'POST'])
 def opinion():
+    direction_id = request.values.get("id")
     with sqlite3.connect(db_name) as conn:
         from html_list import Opinion_list as Opinion_list
         html_list = Opinion_list()
 
         cursor = conn.cursor()   
-        sql = "SELECT user_id FROM `opinion`"
+        sql = '''SELECT id, direction_id, title, description, time, opinion.user_id, AVG(point) as "AVG", count("AVG"), opinion.id
+        FROM `opinion`
+        LEFT JOIN `score`
+        ON score.opinion_id = opinion.id
+        WHERE opinion.direction_id = {}
+        GROUP BY id'''.format(direction_id)
         cursor.execute(sql)
-        
         for row in cursor.fetchall():
-            sql = "SELECT name FROM `user` WHERE `id` = {}".format(row[0])
+            sql = "SELECT name FROM `user` WHERE `id` = {}".format(row[5])
             cursor.execute(sql)
-            user_name = cursor.fetchone[0]
-            html_list.add(row[1], row[2], row[3], row[4], user_name, row[5], row[6])
-    return render_template('opinion.html', html_list=html_list)
+            name = cursor.fetchone()
+            html_list.add(row[0], row[2], row[3], row[4], name[0], row[6], row[7])
+        # user_id 
+            sql = "SELECT point FROM `score`,`opinion` WHERE score.user_id = {} AND opinion.id = {}".format(row[5], row[7])
+            cursor.execute(sql)
+            point = cursor.fetchone()
+            if  point == None :   
+                html_list.set_score()
+            else:
+                html_list.word.append("<td align ='center'>{}</td>".format(point[0]))
+    return render_template('opinion.html', html_list=html_list, direction_id=direction_id)
 @app.route('/opinion_add' ,methods = ['GET', 'POST'])
 def opinion_add():
-    return render_template('opinion_add.html')
-#db_opinion
-@app.route('/db_opinion' ,methods = ['GET', 'POST'])
-def db_opinion():
-    return redirect('/opinion')
+    return render_template('opinion_add.html', direction_id=request.values.get("direction_id"))
+
 @app.route('/db_opinion_add' ,methods = ['GET', 'POST'])
 def db_opinion_add():
-    return redirect('/opinion')
+    id = session.get("id")
+    direction_id = request.form["direction_id"]
+    title = request.form["title"]
+    description = request.form["description"]
 
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()   
+        sql = '''INSERT INTO `opinion` 
+        ( `direction_id`, `title`, `description`,`user_id`)
+        VALUES({}, "{}", "{}", {})'''.format(direction_id, title, description, id)
+        cursor.execute(sql)
+    return redirect('/opinion?id={}'.format(direction_id))
+# insert 進去資料庫還沒做
+@app.route('/score' ,methods = ['GET', 'POST'])
+def score():
+    direction_id = request.values.get("direction_id")
+    score = request.form.getlist("score[]")
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()
+        sql = '''SELECT opinion.user_id, opinion.id
+            FROM `opinion`
+            LEFT JOIN `score`
+            ON score.opinion_id = opinion.id
+            WHERE opinion.direction_id = {}'''.format(direction_id)
+        cursor.execute(sql)
+        for i in cursor.fetchall():
+        # user_id 
+            sql = "SELECT point FROM `score`,`opinion` WHERE score.user_id = {} AND opinion.id = {}".format(row[0], row[1])
+            cursor.execute(sql)
+            point = cursor.fetchone()
+            if  point != None :   
+                sql = "INSERT INTO `score` VALUE({}, {}, {}) ".format(row[0], row[1], score)
+    return redirect('/opinion?id={}'.format(direction_id))
 @app.route('/stat' ,methods = ['GET', 'POST'])
 def stat():
     return 0
-
 
 def data_False(data):
     if data.strip() == '' :

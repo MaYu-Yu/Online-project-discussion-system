@@ -1,3 +1,6 @@
+{% import 'script.html' as script %}
+{{ script.import_css()}}
+
 <html>
     <head>
         <meta charset="UTF-8">
@@ -10,9 +13,10 @@
            <a href="/part">回到上一頁</a>
            <a href="/user">使用者管理</a>
            <a href="/proj">專案管理</a>
-           <a href="/stat">統計管理</a>
         </h3>
+        <h3 style="color: deepskyblue;">
         {{html_list | safe}}
+        </h3>
             <table border="1">
                 <tr>
                     <td>面向名稱</td>

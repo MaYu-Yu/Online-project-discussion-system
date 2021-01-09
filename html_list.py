@@ -10,7 +10,7 @@ class Html_list():
 #part 
 class Part_list(Html_list):
     def add(self, proj_id, proj_name):
-        word = '''<div style="color: deepskyblue; font-size:25px;" onClick="location.href='/discuss?id={}'">{}</div>'''.format(proj_id, proj_name)
+        word = '''<div style="color: deepskyblue; font-size:25px;" onClick="location.href='/discuss?id={}'">{}</div></br>'''.format(proj_id, proj_name)
         self.word.append(word)
 #user
 class User_list(Html_list):
@@ -71,7 +71,7 @@ class Discuss_list1(Html_list):
         self.word.append(word)
 #opinion 
 class Opinion_list(Html_list):
-    def add(self, id, name, description, date, user_name, scores, people_count):
+    def add(self, id, title, description, time, name, avg, people):
         word = '''<tr>
         <td align ="center">{}</td>
         <td align ="center">{}</td>
@@ -79,5 +79,11 @@ class Opinion_list(Html_list):
         <td align ="center">{}</td>
         <td align ="center">{}</td>
         <td align ="center">{}</td>
-        <td align ="center">{}</td>'''.format(id, name, description, date, user_name, scores, people_count)
+        <td align ="center">{}</td>
+        '''.format(id, title, description, time, name, avg, people)
+        self.word.append(word)
+    def set_score(self):
+        word = "<td><select name='score[]'>"
+        for i in range(0,6):
+            word += "<option value='{}'>{}</option>".format(i,i)
         self.word.append(word)

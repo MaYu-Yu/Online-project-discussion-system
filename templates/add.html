@@ -1,3 +1,5 @@
+{% import 'script.html' as script %}
+{{ script.import_css()}}
 <html>
     <head>
         <meta charset="UTF-8" />
@@ -9,7 +11,6 @@
                 <center><b>新增使用者</b></center>
             </h1>
         </p>
-        {% import 'script.html' as script %}
         {{ script.debug_msg(msg) }}
         <form action="/db_add" method="post">
             <table border="1" align = "center">

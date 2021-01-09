@@ -1,31 +1,29 @@
+{% import 'script.html' as script %}
+{{ script.import_css()}}
 <html>
     <head>
         <meta charset="UTF-8">
         <title>使用者管理</title>
     </head>
     <body>
-        <p>
-            <h1>
-                <center><b>使用者管理</b></center>
-            </h1>
-        </p>
-        <center>
         <h1>
-            <input type = "button" name="part" value="回到上一頁" onclick="location.href='/part'">
-            <input type = "button" name="add" value="新增" onclick="location.href='/add'">
-            
+            <center><b>使用者管理</b></center>
+        </h1>
+        <center>
+        <h3>
+            <a href="/part">回到主頁面</a>
+            <a href="/add">帳號新增</a>
             <br>
+        </h3>
             <table border="1" align="center">
                 <tr>
                     <td>名稱</td>
                     <td>帳號</td>
                     <td>編輯功能</td>   
                 </tr>
-                
                 {{html_list | safe}}
-
             </table>
-        </h1>
+        
         </center>
     </body>
 </html>

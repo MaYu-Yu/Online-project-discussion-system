@@ -1,3 +1,5 @@
+{% import 'script.html' as script %}
+{{ script.import_css()}}
 <html>
     <head>
         <meta charset="UTF-8">
@@ -15,8 +17,8 @@
             <center>
             <h1>
                 <form action="/login" method="post" name="form1">
-                    帳號:<input type="text" name="account" required><br>
-                    密碼:<input type="password" name="password" required><br>
+                    帳號: <input type="text" name="account" required><br>
+                    密碼: <input type="password" name="password" required><br>
                     <input type = "reset" value = "清除"><input type = "submit" value = "登入">
                 </form>
             </h1>

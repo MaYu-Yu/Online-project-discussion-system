@@ -1,19 +1,20 @@
+{% import 'script.html' as script %}
+{{ script.import_css()}}
 <html>
     <head>
         <meta charset="UTF-8">
         <title>專案管理</title>
     </head>
     <body>
-        <p>
-            <h1>
-                <center><b>專案管理</b></center>
-            </h1>
-        </p>
-        <center>
         <h1>
-            <input type = "button" name="part" value="回到上一頁" onclick="location.href='/part'">
-            <input type = "button" value = "專案新增" onclick="location.href='/proj_add'">
+            <center><b>專案管理</b></center>
+        </h1>
+        <center>
+        <h3>
+            <a href="/part">回到主頁面</a>
+            <a href="/proj_add">專案新增</a>
             <br>
+        </h3>
             <table border="1" align="center">
                 <tr>
                     <td>專案名稱</td>
@@ -21,7 +22,6 @@
                 </tr>
                 {{html_list | safe}} 
             </table>    
-        </h1>
         </center>
     </body>
 </html>

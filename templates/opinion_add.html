@@ -1,3 +1,5 @@
+{% import 'script.html' as script %}
+{{ script.import_css()}}
 <html>
     <head   >
         <meta charset="UTF-8">
@@ -8,13 +10,11 @@
         <h3>
            <a href="/user">使用者管理</a>
            <a href="/proj">專案管理</a>
-           <a href="/stat">統計管理</a>
         </h3>
-        
         <form action="/db_opinion_add" method ="post">
-            標題:<input type="text" name="name" required><br>
+            標題:<input type="text" name="title" required><br>
             說明:<input type="text" name="description" required><br>
-            <input type ="hidden" name="id" value={{id}}>
+            <input type ="hidden" name="direction_id" value={{direction_id}}>
             <input type ="submit" value="送出">
         </form>
         </center>
