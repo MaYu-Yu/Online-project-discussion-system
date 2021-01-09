@@ -10,16 +10,16 @@ class Html_list():
 #part 
 class Part_list(Html_list):
     def add(self, proj_id, proj_name):
-        word = '''<div onClick="location.href='/discuss?id={}'">{}</div>'''.format(proj_id, proj_name)
+        word = '''<div style="color: deepskyblue; font-size:25px;" onClick="location.href='/discuss?id={}'">{}</div>'''.format(proj_id, proj_name)
         self.word.append(word)
 #user
 class User_list(Html_list):
-    def add(self, name, account, id):
+    def add(self, user_id, name, account, id):
         word = '''<tr>
             <td>{}</td>
             <td>{}</td>
             <td><a href="/update?id={}">修改'''.format(name, account, id)
-        if id != 1:
+        if user_id == 1:
             word += '<a href="/db_del?id={}">刪除'.format(id)
         word += "</td></tr>"
         self.word.append(word)
@@ -63,13 +63,11 @@ class Discuss_list(Html_list):
         self.word.append(word)
 class Discuss_list1(Html_list):
     def add(self, name, description, id):
-        word ='''<div>
-                    <tr>
-                        <td>{}</td>
-                        <td>{}</td>
-                        <td><button onclick="location.href='/opinion?id={}'">討論</td>
-                    </tr>
-                </div>'''.format(name, description, id)
+        word ='''<tr>
+                    <td>{}</td>
+                    <td>{}</td>
+                    <td><button onclick="location.href='/opinion?id={}'">討論</td>
+                </tr>'''.format(name, description, id)
         self.word.append(word)
 #opinion 
 class Opinion_list(Html_list):

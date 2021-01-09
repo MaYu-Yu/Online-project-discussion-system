@@ -54,6 +54,7 @@ def part():
         for row in cursor.fetchall():
             html_list.add(row[0], row[1])
     return render_template("part.html", html_list=html_list)
+
 @app.route('/discuss', methods = ['GET', 'POST'])
 def discuss():
     id = request.values.get("id")
@@ -94,7 +95,7 @@ def user():
         from html_list import User_list as User_list
         html_list = User_list()    
         for row in cursor.fetchall():
-            html_list.add(row[0], row[1], row[2])
+            html_list.add(id, row[0], row[1], row[2])
 
     return render_template("user.html", html_list=html_list)  
 #k
@@ -150,6 +151,7 @@ def db_update():
     id = request.form["id"]
     if data_False(name) or data_False(password):
         return render_template("update.html", name=name, paaword=password, id=id, msg="欄位中含有非法字元！")
+
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()   
         sql = "UPDATE `user` SET `name` = '{}', `password`= '{}' WHERE `id` = {}".format(name, password, id)
