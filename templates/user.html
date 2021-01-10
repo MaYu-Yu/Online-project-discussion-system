@@ -6,24 +6,29 @@
         <title>使用者管理</title>
     </head>
     <body>
-        <h1>
-            <center><b>使用者管理</b></center>
-        </h1>
         <center>
-        <h3>
-            <a href="/part">回到主頁面</a>
-            <a href="/add">帳號新增</a>
-            <br>
-        </h3>
-            <table border="1" align="center">
-                <tr>
-                    <td>名稱</td>
-                    <td>帳號</td>
-                    <td>編輯功能</td>   
-                </tr>
-                {{html_list | safe}}
-            </table>
-        
+            <div class="container">
+                <div border=1 style="width: 500px; border-radius:10px;border:1px #e4e4e4 solid;padding:5px;box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);">
+                    
+                <h1>
+                    <center><b>使用者管理</b></center>
+                </h1>
+                
+                <h3>
+                    <a href="/part">回到主頁面</a>
+                    <a href="/add">帳號新增</a>
+                    <br>
+                </h3>
+                    <table border="1" class="table">
+                        <tr style="color: white; background-color: darkslategrey;" >
+                            <td style="text-align: center;">名稱</td>
+                            <td style="text-align: center;">帳號</td>
+                            <td style="text-align: center;">編輯功能</td>   
+                        </tr>
+                        {{html_list | safe}}
+                    </table>
+                </div>
+            </div>
         </center>
     </body>
 </html>

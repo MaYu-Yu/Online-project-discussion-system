@@ -7,19 +7,27 @@
         
     </head>
     <body >
-        <p>
-            <h1>
-                <center><b>分類</b></center>
-            </h1>
-        </p>
-        <center>
-        <h3>
-            <a href="/user">使用者管理</a>
-            <a href="/proj">專案管理</a>
-        </h3>
-        <h3 style="color: crimson;">點選以下專案進行討論</h3>
-        {{html_list | safe}}
-        </center>
+        <div class="container">
+            <center>
+            <div border=1 style="width: 500px; border-radius:10px;border:1px #e4e4e4 solid;padding:5px;box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);">
+                <p>
+                    <h1>
+                        <center><b>分類</b></center>
+                    </h1>
+                </p>
+                
+                <h3>
+                    <a href="/user">使用者管理</a>
+                    <a href="/proj">專案管理</a>
+                </h3>
+                <hr>
+                <h3  style="color: crimson;padding-bottom:20px;">點選以下專案進行討論</h3>
+                {{html_list | safe}}
+                
+            </div>
+            </center>
+        </div>
+        
         
     </body>
 </html>

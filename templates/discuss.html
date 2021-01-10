@@ -11,25 +11,30 @@
 
 <body>
     <center>
-        <h3>
-            <a href="/part">回到上一頁</a>
-            <a href="/user">使用者管理</a>
-            <a href="/proj">專案管理</a>
-        </h3>
-            <h3 style="color: deepskyblue;">
-                {{html_list | safe}}
-            </h3>
-            <table border="1">
-                <tr>
-                    <td>面向名稱</td>
-                    <td>面向說明</td>
-                    <td>功能</td>
-                </tr>
-                {{html_list1 | safe}}
-            </table>
+        <div class="container">
+            <div border=1 style="width: 700px; border-radius:10px;border:1px #e4e4e4 solid;padding:5px;box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);">
+                
+                <h3>
+                    <a href="/part">回到上一頁</a>
+                    <a href="/user">使用者管理</a>
+                    <a href="/proj">專案管理</a>
+                </h3>
+                <h3 style="color: deepskyblue;">
+                    {{html_list | safe}}
+                </h3>
+                <table border="1" class="table">
+                    <tr style="color: white; background-color: darkslategrey;" >
+                        <td style="text-align: center;">面向名稱</td>
+                        <td style="text-align: center;">面向說明</td>
+                        <td style="text-align: center;">功能</td>
+                    </tr>
+                    {{html_list1 | safe}}
+                </table>
                 <form action="/stat?proj_id={{proj_id}}" method="post">
-                    <input type="submit" value="統計">
+                    <input type="submit" value="統計" class="btn">
                 </form> 
+            </div>
+        </div>
     </center>
 
 </body>

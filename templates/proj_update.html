@@ -8,33 +8,38 @@
     {% import 'script.html' as script %}
     {{ script.import_css()}}
     {{ script.face_add() }}
-    <p>
-        <h1>
-            <center><b>專案修改</b></center>
-        </h1>
-    </p>
-    <form action="/db_proj_update" method="post" name="form1">
-        <center>
-            <h1>
-                <p>
-                    <input type="button" value="回到專案管理" onclick="location.href='/proj'">
-                </p>
-                <p>
-                    專案名稱:<input type="text" name="name" value="{{name}}" required><br>
-                    專案說明:<input type="text" name="description" value="{{description}}" required><br>
-                    <input type="hidden" name="id" value="{{id}}">
-                    <p><input type="button" class="btn face_add" value="新增面向"></p>
-                    <div class="face_div">
-                        <p>
-                            {{ html_list | safe}}
-                        </p>
-                    </div>
-                    <input type="submit" value="修改資料"><input type="reset" value="重新輸入">
-                </p>
+    <center>
+        <div class="container">
+            <div border=1 style="width: 500px; border-radius:10px;border:1px #e4e4e4 solid;padding:5px;box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);">
+          
+            <p>
                 <h1>
-        </center>
-
-    </form>
+                    <center><b>專案修改</b></center>
+                </h1>
+            </p>
+            <h3>
+                <a href="/proj">回到專案管理</a>
+            </h3>
+            <form action="/db_proj_update" method="post" name="form1">
+                <h1>
+                    
+                    <p>
+                        專案名稱:<input type="text" name="name" value="{{name}}" required><br>
+                        專案說明:<input type="text" name="description" value="{{description}}" required><br>
+                        <input type="hidden" name="id" value="{{id}}">
+                        <p><input type="button" class="btn face_add" value="新增面向"></p>
+                        <div class="face_div">
+                            <p>
+                                {{ html_list | safe}}
+                            </p>
+                        </div>
+                        <input class="btn" type="submit" value="修改資料"><input class="btn" type="reset" value="重新輸入">
+                    </p>
+                    <h1>
+            </form>
+            </div>
+        </div>
+    </center>
 </body>
 
 </html>

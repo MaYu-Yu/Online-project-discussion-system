@@ -16,9 +16,9 @@ class Part_list(Html_list):
 class User_list(Html_list):
     def add(self, user_id, name, account, id):
         word = '''<tr>
-            <td>{}</td>
-            <td>{}</td>
-            <td><a href="/update?id={}">修改'''.format(name, account, id)
+            <td style="text-align: center;">{}</td>
+            <td style="text-align: center;">{}</td>
+            <td style="text-align: center;"><a style="padding-right:15px;text-align: center;" href="/update?id={}">修改'''.format(name, account, id)
         if user_id == 1:
             word += '<a href="/db_del?id={}">刪除'.format(id)
         word += "</td></tr>"
@@ -27,10 +27,10 @@ class User_list(Html_list):
 class Proj_list(Html_list):
     def add(self, name, id):
         word ='''<tr>
-            <td>{}</td>
-            <td>
-                <a href="/proj_add_user?id={}">指定成員
-                <a href="/proj_update?id={}">修改
+            <td style="text-align: center;">{}</td>
+            <td style="text-align: center;">
+                <a style="padding-right:15px;" href="/proj_add_user?id={}">指定成員
+                <a style="padding-right:15px;" href="/proj_update?id={}">修改
                 <a href="/db_proj_del?id={}">刪除
             </td>
         </tr>'''.format(name, id, id, id)
@@ -49,10 +49,10 @@ class Proj_add_member(Html_list):
 class Proj_update(Html_list):
     def add(self, direction):
         word = '''
-            <p>面向名稱：<input type="text" value="{}" name="direction_name[]" required>
+            <p>面向名稱：<input type="text" value="{}" name="direction_name[]" required><br>
             面向說明：<input type="text" value="{}" name="direction_description[]" required>
             <input type="hidden" value="{}" name="direction_id[]">
-            <input type="button" class="btn btn-danger" value="X" data-dismiss="alert"></p>
+            <input type="button" class="btn btn-danger" value="X" data-dismiss="alert"></p><br>
             '''.format(direction[0], direction[1], direction[2])
         self.word.append(word)
 
@@ -64,35 +64,35 @@ class Discuss_list(Html_list):
 class Discuss_list1(Html_list):
     def add(self, name, description, id):
         word ='''<tr>
-                    <td>{}</td>
-                    <td>{}</td>
-                    <td><button onclick="location.href='/opinion?id={}'">討論</td>
+                    <td style="text-align: center;">{}</td>
+                    <td style="text-align: center;">{}</td>
+                    <td style="text-align: center;"><button class="btn"onclick="location.href='/opinion?id={}'">討論</td>
                 </tr>'''.format(name, description, id)
         self.word.append(word)
 #opinion 
 class Opinion_list(Html_list):
     def add(self, opinion_id, title, description, time, name, avg, people):
         word = '''<tr>
-        <td align ="center">{}</td>
-        <td align ="center">{}</td>
-        <td align ="center">{}</td>
-        <td align ="center">{}</td>
-        <td align ="center">{}</td>
-        <td align ="center">{}</td>
-        <td align ="center">{}</td>
+        <td style="text-align: center;">{}</td>
+        <td style="text-align: center;">{}</td>
+        <td style="text-align: center;">{}</td>
+        <td style="text-align: center;">{}</td>
+        <td style="text-align: center;">{}</td>
+        <td style="text-align: center;">{}</td>
+        <td style="text-align: center;">{}</td>
         '''.format(opinion_id, title, description, time, name, avg, people)
         self.word.append(word)
     def set_score(self, opinion_id):
-        word = "<td><select name='score[]'>"
+        word = '<td style="text-align: center;"><select name="score[]">'
         for i in range(0,6):
             word += "<option value='{}'>{}</option>".format(i,i)
-        word+= "<input type ='hidden' name='opinion_id[]' value={}>".format(opinion_id)
+        word+= "</select></td><input type ='hidden' name='opinion_id[]' value={}></tr>".format(opinion_id)
         self.word.append(word)
 #stat
 class stat_list(Html_list):
     def add(self, name, title, score):
         word = '''<tr>
-        <td align ="center">{}</td>
-        <td align ="center">{}</td>
-        <td align ="center">{}</td>'''.format(name, title, score)
+        <td style="text-align: center;">{}</td>
+        <td style="text-align: center;">{}</td>
+        <td style="text-align: center;">{}</td>'''.format(name, title, score)
         self.word.append(word)

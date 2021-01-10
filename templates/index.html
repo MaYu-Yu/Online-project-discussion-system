@@ -6,23 +6,26 @@
         <title>專案討論系統</title>
     </head>
     <body>
-        <p>
-            <h1>
-                <center><b>專案討論系統</b></center>
-            </h1>
-        </p>
-        {% import 'script.html' as script %}
-        {{ script.debug_msg(msg) }}
-        <p>
-            <center>
-            <h1>
-                <form action="/login" method="post" name="form1">
-                    帳號: <input type="text" name="account" required><br>
-                    密碼: <input type="password" name="password" required><br>
-                    <input type = "reset" value = "清除"><input type = "submit" value = "登入">
-                </form>
-            </h1>
-            </center>
-        </p>
+        <center>
+            <div class="container">
+                <div border=1 style="width: 500px; border-radius:10px;border:1px #e4e4e4 solid;padding:5px;box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);">
+                    <p>
+                        <h1>
+                            <center><b>專案討論系統</b></center>
+                        </h1>
+                    </p>
+                    {{ script.debug_msg(msg) }}
+                    <p> 
+                        <h1>
+                            <form action="/login" method="post" name="form1">
+                                帳號: <input type="text" name="account" required class="form-control"><br>
+                                密碼: <input type="password" name="password" required><br>
+                                <input type = "reset" value = "清除" class="btn"><input type = "submit" value = "登入" class="btn">
+                            </form>
+                        </h1>
+                    </p>
+                </div>
+            </div>
+        </center>
     </body>
 </html>

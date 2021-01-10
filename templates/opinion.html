@@ -10,78 +10,34 @@
 
 <body>
     <center>
-        <h3>
-            <a href="/part">回到主頁面</a>
-            <a href="/user">使用者管理</a>
-            <a href="/project">專案管理</a>
-        </h3>
-        <div><button onclick="location.href='/opinion_add?direction_id={{direction_id}}'">發表意見</div></br>
-        <form action="/score?direction_id={{direction_id}}" method="post">
-            <table border="1">
-                <tr>
-                    <td>編號</td>
-                    <td>標題</td>
-                    <td>說明</td>
-                    <td>發表日期</td>
-                    <td>發表者的名稱</td>
-                    <td>平均分數</td>
-                    <td>評價人數</td>
-                    <td>評分</td>
-                </tr>
-                {{ html_list | safe}}
-            </table>
-            <input type="submit" value="送出評分">
-        </form>
+        <div class="container">
+            <div border=1 style="width: 800px; border-radius:10px;border:1px #e4e4e4 solid;padding:5px;box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);">
+            
+                <h3>
+                    <a href="/part">回到主頁面</a>
+                    <a href="/user">使用者管理</a>
+                    <a href="/proj">專案管理</a>
+                </h3>
+                <div><button class="btn" onclick="location.href='/opinion_add?direction_id={{direction_id}}'">發表意見</div></br>
+                <form action="/score?direction_id={{direction_id}}" method="post">
+                    <table border="1" class="table">
+                        <tr style="color: white; background-color: darkslategrey;" >
+                            <td style="text-align: center;">編號</td>
+                            <td style="text-align: center;">標題</td>
+                            <td style="text-align: center;">說明</td>
+                            <td style="text-align: center;">發表日期</td>
+                            <td style="text-align: center;">發表者的名稱</td>
+                            <td style="text-align: center;">平均分數</td>
+                            <td style="text-align: center;">評價人數</td>
+                            <td style="text-align: center;">評分</td>
+                        </tr>
+                        {{ html_list | safe}}
+                    </table>
+                    <input style="margin-top: 15px;" class="btn" type="submit" value="送出評分">
+                </form>
+            </div>
+        </div>
     </center>
-    <style>
-        .txt-center {
-            text-align: center;
-        }
-
-        .hide {
-            display: none;
-        }
-
-        .clear {
-            float: none;
-            clear: both;
-        }
-
-        .rating {
-            width: 90px;
-            unicode-bidi: bidi-override;
-            direction: rtl;
-            text-align: center;
-            position: relative;
-        }
-
-        .rating>label {
-            float: right;
-            display: inline;
-            padding: 0;
-            margin: 0;
-            position: relative;
-            width: 1em;
-            cursor: pointer;
-            color: #000;
-        }
-
-        .rating>label:hover,
-        .rating>label:hover~label,
-        .rating>input.radio-btn:checked~label {
-            color: transparent;
-        }
-
-        .rating>label:hover:before,
-        .rating>label:hover~label:before,
-        .rating>input.radio-btn:checked~label:before,
-        .rating>input.radio-btn:checked~label:before {
-            content: "\2605";
-            position: absolute;
-            left: 0;
-            color: #FFD700;
-        }
-    </style>
 </body>
 
 </html>

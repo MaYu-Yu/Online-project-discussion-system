@@ -1,16 +1,16 @@
 {% macro face_add() %}
-<script src={{ url_for('static',filename='jquery-3.4.1.min.js' ) }}></script>
-<script src={{ url_for('static',filename='bootstrap.min.js' ) }}></script>
+<script src={{ url_for( 'static',filename='jquery-3.4.1.min.js' ) }}></script>
+<script src={{ url_for( 'static',filename='bootstrap.min.js' ) }}></script>
 <script>
-    $(function () {
-        $(".face_add").click(function () {
+    $(function() {
+        $(".face_add").click(function() {
             if ($(".face_div").children().length == 10) {
                 alert("超過上限");
             } else {
                 $.ajax({
                     url: '/face_add',
                     type: 'get',
-                    success: function (data){
+                    success: function(data) {
                         $(".face_div").append(data);
                     }
                 })
@@ -18,13 +18,10 @@
         })
     })
 </script>
-{% endmacro %}
-
-{% macro import_css() %}
+{% endmacro %} {% macro import_css() %}
 <link rel="stylesheet" href="{{ url_for('static',filename ='bootstrap.min.css') }}">
-{% endmacro %}
-
-{% macro debug_msg(msg) %}
+<link rel="stylesheet" href="{{ url_for('static',filename ='bootstrap.css') }}">
+ {% endmacro %} {% macro debug_msg(msg) %}
 <center>
     <h2 style="color: red;">{{msg}}</h2>
 </center>
