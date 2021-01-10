@@ -2,29 +2,41 @@
 {{ script.import_css()}}
 
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>討論</title>
-        
-    </head>
-    <body >
-        <center>
+
+<head>
+    <meta charset="UTF-8">
+    <title>討論</title>
+
+</head>
+
+<body>
+    <center>
         <h3>
-           <a href="/part">回到上一頁</a>
-           <a href="/user">使用者管理</a>
-           <a href="/proj">專案管理</a>
+            <a href="/part">回到上一頁</a>
+            <a href="/user">使用者管理</a>
+            <a href="/proj">專案管理</a>
         </h3>
-        <h3 style="color: deepskyblue;">
-        {{html_list | safe}}
-        </h3>
+        {% if proj_OK != True %}
+            <h3 style="color: deepskyblue;">
+                {{html_list | safe}}
+            </h3>
             <table border="1">
                 <tr>
                     <td>面向名稱</td>
                     <td>面向說明</td>
                     <td>功能</td>
                 </tr>
-            {{html_list1 | safe}}
-        </center>
-        
-    </body>
+                {{html_list1 | safe}}
+            </table>
+            {% if user_id == 1 %}
+                <form action="/stat?" method="post">
+
+                <input type="submit" value="統計">
+            {% endif %}
+            </form>
+        {% endif %}  
+    </center>
+
+</body>
+
 </html>

@@ -71,7 +71,7 @@ class Discuss_list1(Html_list):
         self.word.append(word)
 #opinion 
 class Opinion_list(Html_list):
-    def add(self, id, title, description, time, name, avg, people):
+    def add(self, opinion_id, title, description, time, name, avg, people):
         word = '''<tr>
         <td align ="center">{}</td>
         <td align ="center">{}</td>
@@ -80,10 +80,11 @@ class Opinion_list(Html_list):
         <td align ="center">{}</td>
         <td align ="center">{}</td>
         <td align ="center">{}</td>
-        '''.format(id, title, description, time, name, avg, people)
+        '''.format(opinion_id, title, description, time, name, avg, people)
         self.word.append(word)
-    def set_score(self):
+    def set_score(self, opinion_id):
         word = "<td><select name='score[]'>"
         for i in range(0,6):
             word += "<option value='{}'>{}</option>".format(i,i)
+        word+= "<input type ='hidden' name='opinion_id[]' value={}>".format(opinion_id)
         self.word.append(word)

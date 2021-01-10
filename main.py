@@ -74,7 +74,7 @@ def discuss():
         html_list1 = Discuss_list1()
         for row in cursor.fetchall():
             html_list1.add(row[0], row[1], row[2])
-    return render_template("discuss.html", html_list=html_list, html_list1=html_list1)
+    return render_template("discuss.html", html_list=html_list, html_list1=html_list1, user_id=session.get("id"))
 
 @app.route('/face_add', methods = ['GET', 'POST'])
 def face_add():
@@ -296,28 +296,45 @@ def opinion():
     with sqlite3.connect(db_name) as conn:
         from html_list import Opinion_list as Opinion_list
         html_list = Opinion_list()
-
-        cursor = conn.cursor()   
-        sql = '''SELECT id, direction_id, title, description, time, opinion.user_id, AVG(point) as "AVG", count("AVG"), opinion.id
+        cursor = conn.cursor() 
+    #主要顯示需要的sql
+        sql = '''SELECT opinion.id, title, description, time, opinion.user_id, AVG(point) as "AVG", IIF(AVG(point)>=0, count("AVG"), 0) as "people"
         FROM `opinion`
         LEFT JOIN `score`
         ON score.opinion_id = opinion.id
         WHERE opinion.direction_id = {}
-        GROUP BY id'''.format(direction_id)
+        GROUP BY opinion.id'''.format(direction_id)
         cursor.execute(sql)
-        for row in cursor.fetchall():
-            sql = "SELECT name FROM `user` WHERE `id` = {}".format(row[5])
+        db_table = cursor.fetchall()
+    #point需要的sql
+        sql = '''SELECT opinion.id, point, score.user_id
+            FROM `opinion`
+            LEFT JOIN `score`
+            ON score.opinion_id = opinion.id
+            WHERE opinion.direction_id = {}'''.format(direction_id)
+        cursor.execute(sql)
+        db_point = cursor.fetchall()
+        p_count = 0
+        for row in db_table:
+            sql = "SELECT name FROM `user` WHERE `id` = {}".format(row[4])
             cursor.execute(sql)
             name = cursor.fetchone()
-            html_list.add(row[0], row[2], row[3], row[4], name[0], row[6], row[7])
-        # user_id 
-            sql = "SELECT point FROM `score`,`opinion` WHERE score.user_id = {} AND opinion.id = {}".format(row[5], row[7])
-            cursor.execute(sql)
-            point = cursor.fetchone()
-            if  point == None :   
-                html_list.set_score()
-            else:
-                html_list.word.append("<td align ='center'>{}</td>".format(point[0]))
+            html_list.add(row[0], row[1], row[2], row[3], name[0], row[5], row[6])
+        #看people有幾個 分數就會跑幾次看user有沒有在裡面
+            people = row[6]
+        # 拿出對應的point沒有就放評分選單
+            if people == 0:
+                html_list.set_score(row[0])
+            else :
+                flag = False
+                for i in range(people):
+                    point = db_point[p_count]
+                    p_count+=1
+                    if point[2] == session.get('id'):
+                        flag = True
+                        html_list.word.append("<td align ='center'>{}</td>".format(point[1]))
+                if not flag:
+                    html_list.set_score(row[0])
     return render_template('opinion.html', html_list=html_list, direction_id=direction_id)
 @app.route('/opinion_add' ,methods = ['GET', 'POST'])
 def opinion_add():
@@ -341,26 +358,26 @@ def db_opinion_add():
 @app.route('/score' ,methods = ['GET', 'POST'])
 def score():
     direction_id = request.values.get("direction_id")
+    user_id = session.get('id')
+    opinion_id = request.form.getlist("opinion_id[]")
     score = request.form.getlist("score[]")
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
-        sql = '''SELECT opinion.user_id, opinion.id
-            FROM `opinion`
-            LEFT JOIN `score`
-            ON score.opinion_id = opinion.id
-            WHERE opinion.direction_id = {}'''.format(direction_id)
-        cursor.execute(sql)
-        for i in cursor.fetchall():
-        # user_id 
-            sql = "SELECT point FROM `score`,`opinion` WHERE score.user_id = {} AND opinion.id = {}".format(row[0], row[1])
+        for i in range(len(score)):
+            sql = sql = "INSERT INTO `score` VALUES({}, {}, {}) ".format(user_id, opinion_id[i], score[i])
             cursor.execute(sql)
-            point = cursor.fetchone()
-            if  point != None :   
-                sql = "INSERT INTO `score` VALUE({}, {}, {}) ".format(row[0], row[1], score)
     return redirect('/opinion?id={}'.format(direction_id))
 @app.route('/stat' ,methods = ['GET', 'POST'])
 def stat():
-    return 0
+    sql = '''SELECT direction.name, opinion.title, AVG(point)
+    FROM `score`
+    INNER JOIN (`direction` 
+    INNER JOIN `opinion`
+    ON direction.id  = opinion.direction_id)
+    ON score.opinion_id = opinion.id
+    WHERE `proj_id` = {}
+    GROUP BY opinion.title
+    ORDER BY AVG(point) DESC LIMIT 1'''.format(proj_id)
 
 def data_False(data):
     if data.strip() == '' :
