@@ -58,6 +58,7 @@ def part():
 @app.route('/discuss', methods = ['GET', 'POST'])
 def discuss():
     id = request.values.get("id")
+
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
     #get 專案名稱
@@ -74,7 +75,7 @@ def discuss():
         html_list1 = Discuss_list1()
         for row in cursor.fetchall():
             html_list1.add(row[0], row[1], row[2])
-    return render_template("discuss.html", html_list=html_list, html_list1=html_list1, user_id=session.get("id"))
+    return render_template("discuss.html", html_list=html_list, html_list1=html_list1, user_id=session.get("id"), proj_id=id)
 
 @app.route('/face_add', methods = ['GET', 'POST'])
 def face_add():
@@ -230,14 +231,13 @@ def db_proj_del():
         sql = "DELETE FROM `direction` WHERE `proj_id`= '{}'".format(id)
         cursor.execute(sql)
     return redirect('/proj')
-#ajax
+
 @app.route('/db_proj_add' ,methods = ['GET', 'POST'])
 def db_proj_add():
     name = request.form["name"]
     description= request.form["description"]
     direction_name = request.form.getlist('direction_name[]')
     direction_description = request.form.getlist('direction_description[]')
-    proj_id = request.form.getlist('proj_id[]')
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
         sql = "INSERT INTO `project`(`id`,`name`,`description`) VALUES (NULL, '{}', '{}')".format(name, description)
@@ -245,7 +245,7 @@ def db_proj_add():
         id = int(cursor.lastrowid)
         sql = "INSERT INTO `member`(`id`,`project_id`,`user_id`,`type`) VALUES (NULL, {}, '1', '1')".format(id)
         cursor.execute(sql)
-        for i in range(len(proj_id) ):
+        for i in range(len(direction_name) ):
             sql = "INSERT INTO `direction` (`id`,`proj_id`, `name`, `description`) \
                 VALUES (NULL, {} , '{}', '{}')".format(id, direction_name[i], direction_description[i])
             cursor.execute(sql)
@@ -258,14 +258,13 @@ def db_proj_update():
 
     direction_name = request.form.getlist('direction_name[]')
     direction_description = request.form.getlist('direction_description[]')
-    proj_id = request.form.getlist('proj_id[]')
     with sqlite3.connect(db_name) as conn:
         cursor = conn.cursor()
         sql = "DELETE FROM `direction` WHERE `proj_id`='{}'".format(id)
         cursor.execute(sql)
         sql = "UPDATE `project` SET `name` = '{}',`description`='{}' WHERE `id` = {}".format(name, description, id)
         cursor.execute(sql)
-        for i in range(len(proj_id) ):
+        for i in range(len(direction_name) ):
             sql = "INSERT INTO `direction` (`id`,`proj_id`, `name`, `description`) \
                 VALUES (NULL, '{}' , '{}', '{}')".format(id, direction_name[i], direction_description[i])
             cursor.execute(sql)
@@ -369,15 +368,27 @@ def score():
     return redirect('/opinion?id={}'.format(direction_id))
 @app.route('/stat' ,methods = ['GET', 'POST'])
 def stat():
-    sql = '''SELECT direction.name, opinion.title, AVG(point)
-    FROM `score`
-    INNER JOIN (`direction` 
-    INNER JOIN `opinion`
-    ON direction.id  = opinion.direction_id)
-    ON score.opinion_id = opinion.id
-    WHERE `proj_id` = {}
-    GROUP BY opinion.title
-    ORDER BY AVG(point) DESC LIMIT 1'''.format(proj_id)
+    proj_id = request.values.get("proj_id")
+
+    from html_list import stat_list as stat_list
+    html_list = stat_list()   
+    with sqlite3.connect(db_name) as conn:
+        cursor = conn.cursor()
+        sql = "SELECT project.name FROM `project` WHERE project.id = {}".format(proj_id)
+        cursor.execute(sql)
+        proj_name = cursor.fetchone()[0]
+        sql = '''SELECT direction.name, opinion.title, MAX(score.point)
+        FROM `score`
+        INNER JOIN (`direction` 
+        INNER JOIN `opinion`
+        ON direction.id  = opinion.direction_id)
+        ON score.opinion_id = opinion.id
+        WHERE `proj_id` = {}
+        GROUP BY name'''.format(proj_id)
+        cursor.execute(sql)
+        for row in cursor.fetchall():
+            html_list.add(row[0], row[1], row[2])
+        return render_template("stat.html", html_list=html_list, proj_name=proj_name)
 
 def data_False(data):
     if data.strip() == '' :

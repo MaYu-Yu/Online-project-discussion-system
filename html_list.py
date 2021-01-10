@@ -88,3 +88,11 @@ class Opinion_list(Html_list):
             word += "<option value='{}'>{}</option>".format(i,i)
         word+= "<input type ='hidden' name='opinion_id[]' value={}>".format(opinion_id)
         self.word.append(word)
+#stat
+class stat_list(Html_list):
+    def add(self, name, title, score):
+        word = '''<tr>
+        <td align ="center">{}</td>
+        <td align ="center">{}</td>
+        <td align ="center">{}</td>'''.format(name, title, score)
+        self.word.append(word)

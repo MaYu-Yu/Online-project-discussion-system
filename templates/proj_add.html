@@ -1,13 +1,13 @@
-{% import 'script.html' as script %}
-{{ script.import_css()}}
+
 <html>
     <head>
         <meta charset="UTF-8" />
         <title>新增專案</title>
     </head>
-    {% import 'script.html' as script %}
-    {{ script.face_add() }}
     <body>
+        {% import 'script.html' as script %}
+        {{ script.import_css()}}
+        {{ script.face_add() }}
         <p>
             <h1>
                 <center><b>新增專案</b></center>

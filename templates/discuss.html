@@ -16,7 +16,6 @@
             <a href="/user">使用者管理</a>
             <a href="/proj">專案管理</a>
         </h3>
-        {% if proj_OK != True %}
             <h3 style="color: deepskyblue;">
                 {{html_list | safe}}
             </h3>
@@ -28,13 +27,9 @@
                 </tr>
                 {{html_list1 | safe}}
             </table>
-            {% if user_id == 1 %}
-                <form action="/stat?" method="post">
-
-                <input type="submit" value="統計">
-            {% endif %}
-            </form>
-        {% endif %}  
+                <form action="/stat?proj_id={{proj_id}}" method="post">
+                    <input type="submit" value="統計">
+                </form> 
     </center>
 
 </body>
